@@ -11,21 +11,39 @@ import Profile from "./components/Profile/";
 import Results from "./components/Results/";
 
 function App() {
+  const theme = extendTheme({
+    fonts: {
+      // Set the body font family to Roboto
+      body: 'Roboto, system-ui, sans-serif',
+      // Optionally set the heading font to the same or choose another
+      heading: 'Roboto, Georgia, serif',
+    },
+  });
+  
   return (
     <ChakraProvider>
-      <Box minH="100vh" bg="#1A1A2E">
-        <HashRouter>
-            <Routes>
-              <Route path="/" element={<Header/>} />
-              <Route path="" element={<Home />} />
-              <Route path="home" element={<Home/>} />
-              <Route path="details" element={<Details/>} />
-              <Route path="profile" element={<Profile/>} />
-              <Route path="login" element={<Login/>} />
-              <Route path="register" element={<Register/>} />
-              <Route path="results" element={<Results/>} />
-            </Routes>
-        </HashRouter>
+      <Box minH="100vh" position="relative" bg="#1A1A2E">
+        <Box 
+          height="89vh" 
+          position="absolute" 
+          width="100%" 
+          bottom="0" 
+          borderTopRadius="1em" 
+          bg="#2b2b3f"
+        >
+          <HashRouter>
+              <Routes>
+                <Route path="/" element={<Header/>} />
+                <Route path="" element={<Home />} />
+                <Route path="home" element={<Home/>} />
+                <Route path="details" element={<Details/>} />
+                <Route path="profile" element={<Profile/>} />
+                <Route path="login" element={<Login/>} />
+                <Route path="register" element={<Register/>} />
+                <Route path="results" element={<Results/>} />
+              </Routes>
+          </HashRouter>
+        </Box>
       </Box>
     </ChakraProvider>
   );
