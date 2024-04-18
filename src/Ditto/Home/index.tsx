@@ -1,8 +1,11 @@
+import React from "react";
 
 function Home() {
   return (
-    console.log("Home")
+    <div>
+      Home
+      <div>Homepage Contents</div>
+    </div>
   );
 }
 export default Home;
-
