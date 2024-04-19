@@ -1,6 +1,5 @@
 import React from "react";
-import { HashRouter } from "react-router-dom";
-import { Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ChakraProvider, Box, extendTheme } from '@chakra-ui/react'
 import Header from './components/Header/'
 import Details from "./components/Details/";
@@ -19,7 +18,7 @@ function App() {
   });
   
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Box minH="100vh" position="relative" bg="#1A1A2E">
         <Box 
           height="89vh" 
@@ -29,18 +28,18 @@ function App() {
           borderTopRadius="1em" 
           bg="#2b2b3f"
         >
-          <HashRouter>
+          <BrowserRouter>
               <Routes>
-                <Route path="/" element={<Header/>} />
-                <Route path="" element={<Home />} />
-                <Route path="home" element={<Home/>} />
-                <Route path="details" element={<Details/>} />
-                <Route path="profile" element={<Profile/>} />
+                <Route path="/" element={<Header/>}>
+                  <Route index element={<Home/>} />
+                  <Route path="details" element={<Details/>} />
+                  <Route path="profile" element={<Profile/>} />
+                  <Route path="results" element={<Results/>} />
+                </Route>
                 <Route path="login" element={<Login/>} />
                 <Route path="register" element={<Register/>} />
-                <Route path="results" element={<Results/>} />
               </Routes>
-          </HashRouter>
+          </BrowserRouter>
         </Box>
       </Box>
     </ChakraProvider>

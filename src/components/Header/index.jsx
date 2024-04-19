@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { API_URL } from "../../consts";
-import { useNavigate, Link as ReachLink } from "react-router-dom";
-import { ChakraProvider, Box, Button } from '@chakra-ui/react'
+import { useNavigate, Link as ReachLink, Outlet } from "react-router-dom";
+import { HStack, Button, Input, InputGroup, InputLeftElement, useDisclosure } from '@chakra-ui/react';
 
 function Header() {
   const navigate = useNavigate();
   const [user, setUser] = useState({});
-  const [auth, setAuth] = useState();
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [auth, setAuth] = useState(false);
+  const { isOpen: searchOpen, onToggle: toggleSearch } = useDisclosure();
 
   const getProfile = () => {
     fetch(`${API_URL}/profile`, {
@@ -16,7 +18,7 @@ function Header() {
     }).then(res => res.json())
     .then(user => {
       setUser(user);
-    })
+    });
   }
 
   const getAuth = () => {
@@ -26,9 +28,9 @@ function Header() {
     }).then(res => res.json())
     .then(auth => {
       setAuth(auth);
-    })
+    });
   }
-  
+
   const logout = () => {
     fetch(`${API_URL}/logout`, {
       method: 'POST',
@@ -42,22 +44,51 @@ function Header() {
   useEffect(getAuth, [navigate]);
   useEffect(getProfile, [navigate]);
 
-  let button;
-  let register;
-  if (typeof(auth) == "boolean") {
-    button = <Button m={3} onClick={ logout }>
+  const button = auth ? (
+    <Button bg="transparent" color="lightgray" onClick={logout}>
       Logout
     </Button>
-    register = <Button mr={3} bg="#7986e6" color="white"><ReachLink to="/profile">Profile</ReachLink></Button>
-  }
-  else {
-    button = <Button m={3}>
+  ) : (
+    <Button bg="transparent" color="lightgray">
       <ReachLink to="/login">Login</ReachLink>
     </Button>
-    register = <Button mr={3} bg="#7986e6" color="white"><ReachLink to="/register">Register</ReachLink></Button>
-  }
-  return (
-<></>
   );
-  }
+
+  const register = (
+    <Button bg="transparent" color="lightgray">
+      <ReachLink to={auth ? "/profile" : "/register"}>{auth ? "Profile" : "Sign Up"}</ReachLink>
+    </Button>
+  );
+
+  const searchButton = (
+    <Button onClick={toggleSearch} bg="transparent">
+      <FontAwesomeIcon icon={faMagnifyingGlass} color="lightgray" />
+    </Button>
+  );
+
+  return (
+    <>
+    <HStack m="3" position="fixed" right="0">
+      {searchOpen && (
+        <InputGroup position="fixed" width="50em" left="0" ml="10em">
+          <InputLeftElement
+            pointerEvents="none"
+            children={<FontAwesomeIcon icon={faMagnifyingGlass} color="gray" />}
+          />
+          <Input 
+            placeholder="Search for a song..."
+            bg="white"
+            borderRadius="2em"
+          />
+        </InputGroup>
+      )}
+      {searchButton}
+      {button}
+      {register}
+    </HStack>
+    <Outlet />
+    </>
+  );
+}
+
 export default Header;
