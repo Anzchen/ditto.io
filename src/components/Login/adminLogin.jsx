@@ -3,32 +3,31 @@ import { Box, Heading, Input, Button, Link, Flex } from "@chakra-ui/react";
 import { API_URL } from "../../consts";
 import { useNavigate } from "react-router-dom";
 
-function Register() {
+function AdminLogin() {
   const navigate = useNavigate();
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [adminKey, setAdminKey] = useState("");
 
-  const handleRegister = () => {
-    fetch(`${API_URL}/register`, {
+  const handleAdminLogin = () => {
+    fetch(`${API_URL}/admin-login`, {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ fullName, email, username, password }),
+      body: JSON.stringify({ username, password, adminKey }),
     })
       .then((res) => {
         if (res.ok) {
-          navigate("/login"); // redirect to login page on successful registration
+          navigate("/admin-dashboard"); // redirect to admin dashboard on successful login
         } else {
-          throw new Error("Registration failed");
+          throw new Error("Admin login failed");
         }
       })
       .catch((error) => {
-        console.error("Registration error:", error);
-        // handle registration error (ex. display error message)
+        console.error("Admin login error:", error);
+        // handle admin login error (ex. display error message)
       });
   };
 
@@ -47,25 +46,8 @@ function Register() {
         textAlign="center"
       >
         <Heading as="h2" size="lg" mb="6" color="#13294C">
-          Register
+          Admin Login
         </Heading>
-        <Input
-          placeholder="Full Name"
-          variant="filled"
-          size="md"
-          mb="4"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        />
-        <Input
-          placeholder="Email"
-          type="email"
-          variant="filled"
-          size="md"
-          mb="4"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
         <Input
           placeholder="Username"
           variant="filled"
@@ -79,21 +61,30 @@ function Register() {
           placeholder="Password"
           variant="filled"
           size="md"
-          mb="6"
+          mb="4"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button
-          colorScheme="purple"
+        <Input
+          type="text"
+          placeholder="Admin Key (4 digits)"
+          variant="filled"
           size="md"
-          onClick={handleRegister}
-          mb="4"
+          mb="6"
+          value={adminKey}
+          onChange={(e) => setAdminKey(e.target.value)}
+        />
+        <Button
+          colorScheme="purple" 
+          size="md"
+          onClick={handleAdminLogin}
+          mb="4" 
         >
-          Register
+          Log In as Admin
         </Button>
         <Box>
           <Link color="purple.800" href="/login">
-            Already have an account? Log in here
+            Back to Login
           </Link>
         </Box>
       </Box>
@@ -101,4 +92,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default AdminLogin;

@@ -8,6 +8,7 @@ import Login from "./components/Login/";
 import Register from "./components/Login/register";
 import Profile from "./components/Profile/";
 import Results from "./components/Results/";
+import AdminLogin from "./components/Login/adminLogin";
 
 function App() {
   const theme = extendTheme({
@@ -38,6 +39,8 @@ function App() {
                 </Route>
                 <Route path="login" element={<Login/>} />
                 <Route path="register" element={<Register/>} />
+                {/* <Route path="/admin-dashboard" element={<AdminDashboard />} /> */}
+                <Route path="/admin-login" element={<AdminLogin />} />
               </Routes>
           </BrowserRouter>
         </Box>
