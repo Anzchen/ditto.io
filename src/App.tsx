@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ChakraProvider, Box, extendTheme } from '@chakra-ui/react'
-import Header from './components/Header/'
-import Details from "./components/Details/";
-import Home from "./components/Home/";
-import Login from "./components/Login/";
+import Header from './components/Header'
+import Details from "./components/Details";
+import Home from "./components/Home";
+import Login from "./components/Login";
 import Register from "./components/Login/register";
-import Profile from "./components/Profile/";
-import Results from "./components/Results/";
+import Profile from "./components/Profile";
+import Results from "./components/Results";
 import AdminLogin from "./components/Login/adminLogin";
 
 function App() {
