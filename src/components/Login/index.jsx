@@ -2,33 +2,17 @@ import React, { useState } from "react";
 import { Box, Heading, Input, Button, Link, Flex } from "@chakra-ui/react";
 import { API_URL } from "../../consts";
 import { useNavigate } from "react-router-dom";
+import { User } from "./client";
+import * as client from "./client"
 
 function Login() {
+  const [credentials, setCredentials] = useState<User>({ _id: "",
+    username: "", password: "", firstName: "", lastName: "", role: "USER"
+  });
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogin = () => {
-    fetch(`${API_URL}/login`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          navigate("/profile"); // redirect to profile page on successful login
-          return res.json();
-        } else {
-          throw new Error("Login failed");
-        }
-      })
-      .catch((error) => {
-        console.error("Login error:", error);
-        // handle login error (ex. display error message)
-      });
+  const signin = async () => {
+    await client.signin(credentials);
+    navigate("/profile");
   };
 
   return (
@@ -53,8 +37,8 @@ function Login() {
           variant="filled"
           size="md"
           mb="4"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={credentials.username} onChange={(e) =>
+            setCredentials({ ...credentials, username: e.target.value })}
         />
         <Input
           type="password"
@@ -62,13 +46,13 @@ function Login() {
           variant="filled"
           size="md"
           mb="6"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={credentials.password} onChange={(e) =>
+            setCredentials({ ...credentials, password: e.target.value })}
         />
         <Button
           colorScheme="purple"
           size="md"
-          onClick={handleLogin}
+          onClick={signin}
           mb="4" 
         >
           Sign In
