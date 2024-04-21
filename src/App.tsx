@@ -6,9 +6,10 @@ import Details from "./components/Details";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Register from "./components/Login/register";
-import Profile from "./components/Profile/editProfile";
+import Profile from "./components/Profile";
 import Results from "./components/Results";
 import AdminLogin from "./components/Login/adminLogin";
+import EditProfile from "./components/Profile/editProfile";
 
 function App() {
   const theme = extendTheme({
@@ -34,13 +35,14 @@ function App() {
               <Route path="/" element={<Header />}>
                 <Route index element={<Home />} />
                 <Route path="details" element={<Details />} />
-                <Route path="profile" element={<Profile />} />
+                <Route path="/profile/:username" element={<Profile />} />
+                <Route path="edit-profile" element={<EditProfile />} />
                 <Route path="results" element={<Results />} />
               </Route>
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               {/* <Route path="/admin-dashboard" element={<AdminDashboard />} /> */}
-              <Route path="/admin-login" element={<AdminLogin />} />
+              <Route path="admin-login" element={<AdminLogin />} />
             </Routes>
           </BrowserRouter>
         </Box>

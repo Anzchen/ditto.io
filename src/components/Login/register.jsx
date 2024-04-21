@@ -11,7 +11,7 @@ function Register() {
   const signup = async () => {
     try {
       await client.signup(user);
-      navigate("/profile");
+      navigate("/profile/${username}");
     } catch (err) {
       setError(err.response.data.message);
     }

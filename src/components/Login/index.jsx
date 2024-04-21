@@ -10,7 +10,7 @@ function Login() {
   const navigate = useNavigate();
   const signin = async () => {
     await client.signin(username, password);
-    navigate("/profile");
+    navigate("/profile/${username}");
   };
 
   return (

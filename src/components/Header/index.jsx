@@ -60,7 +60,7 @@ function Header() {
   };
 
   const profile = () => {
-    navigate("/profile");
+    navigate("/profile/${username}");
   };
 
   const goHome = () => {
