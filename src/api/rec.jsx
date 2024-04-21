@@ -16,7 +16,6 @@ const topTracksIds = [
 ];
 
 async function getRecommendations(){
-  // Endpoint reference : https://developer.spotify.com/documentation/web-api/reference/get-recommendations
   return (await fetchWebApi(
     `v1/recommendations?limit=5&seed_tracks=${topTracksIds.join(',')}`, 'GET'
   )).tracks;
