@@ -68,7 +68,7 @@ function Header() {
 
   return (
     <>
-    <HStack m="3" position="fixed" right="0">
+    <HStack position="relative" left="70em">
       {searchOpen && (
         <InputGroup position="fixed" width="50em" left="0" ml="10em">
           <InputLeftElement

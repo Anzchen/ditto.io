@@ -20,13 +20,15 @@ function App() {
   
   return (
     <ChakraProvider theme={theme}>
-      <Box minH="100vh" position="relative" bg="#1A1A2E">
+      
+      <Box height="10vh" position="relative" bg="#1A1A2E">
+      </Box>
         <Box 
-          height="89vh" 
-          position="absolute" 
+          // height="100vh" 
+          position="relative" 
           width="100%" 
           bottom="0" 
-          borderTopRadius="1em" 
+          // borderTopRadius="1em" 
           bg="#2b2b3f"
         >
           <BrowserRouter>
@@ -44,7 +46,6 @@ function App() {
               </Routes>
           </BrowserRouter>
         </Box>
-      </Box>
     </ChakraProvider>
   );
 }
