@@ -52,7 +52,8 @@ export default function Details(props) {
         {createReviewButton}
       </HStack>
       <VStack>
-      {displayCreateReview && <CreateReview/>}
+        {/* have to pass song_id and username to CreateReview */}
+      {displayCreateReview && <CreateReview user={"user1"} track={songid}/>}
         <Text mt="5em" mr="60em" color="white">
           Reviews
           <Text ml="1em" as="span" bg="pink" color="red" h="1" borderRadius="50%" p="1">

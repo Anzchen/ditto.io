@@ -46,7 +46,7 @@ export const signout = async () => {
 // Reviews
 export const REVIEWS_API = `http://localhost:4000/api/reviews`;
 
-export const createReview = async () => {
-  const response = await axios.post(`${REVIEWS_API}/createReview`);
+export const createReview = async (review: any) => {
+  const response = await axios.post(`${REVIEWS_API}`, review);
   return response.data;
 };
