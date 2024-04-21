@@ -32,7 +32,7 @@ function Details() {
 
   useEffect(() => {
     async function getReviews() {
-      const [reviews] = await axios.get(
+      const reviews = await axios.get(
         `http://localhost:4000/api/reviews/songs/${songid}`
       );
       setReviewList(reviews);
