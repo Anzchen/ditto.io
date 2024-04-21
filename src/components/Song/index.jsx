@@ -10,6 +10,8 @@ function Song(props) {
         {props.song.name}
         <br />
       </Text>
+      {/* here's a link to all the things we can get from a song:
+      https://developer.spotify.com/documentation/web-api/reference/get-several-tracks  */}
     </Box>
   );
 }
