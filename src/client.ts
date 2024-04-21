@@ -3,6 +3,8 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 // export const BASE_API = process.env.REACT_APP_API_BASE_URL;
+
+// Users
 export const USERS_API = `http://localhost:4000/api/users`;
 
 export const signin = async (username: string, password: string) => {
@@ -38,5 +40,13 @@ export const signup = async (user: any) => {
 };
 export const signout = async () => {
   const response = await axios.post(`${USERS_API}/signout`);
+  return response.data;
+};
+
+// Reviews
+export const REVIEWS_API = `http://localhost:4000/api/reviews`;
+
+export const createReview = async () => {
+  const response = await axios.post(`${REVIEWS_API}/createReview`);
   return response.data;
 };

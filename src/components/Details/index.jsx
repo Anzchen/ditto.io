@@ -1,34 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { VStack, HStack, Box, Image, Text, Button } from "@chakra-ui/react";
 import ReviewItem from "./ReviewItem/";
+import CreateReview from "./CreateReview";
 import axios from "axios";
 
 // Need to get Song Information from parent component
-function Details() {
+export default function Details(props) {
   const songid = "7ouMYWpwJ422jRcDASZB7P";
-  const [reviewList, setReviewList] = useState([
-    // {
-    //   song_id: "7ouMYWpwJ422jRcDASZB7P",
-    //   star_rating: 5,
-    //   timestamp: 1,
-    //   reviewer: "Ant",
-    //   text: "this song was great!",
-    // },
-    // {
-    //   song_id: "7ouMYWpwJ422jRcDASZB7P",
-    //   star_rating: 3,
-    //   timestamp: 2,
-    //   reviewer: "Aidan",
-    //   text: "this song was great2!",
-    // },
-    // {
-    //   song_id: "7ouMYWpwJ422jRcDASZB7P",
-    //   star_rating: 2,
-    //   timestamp: 3,
-    //   reviewer: "Christina",
-    //   text: "this song was great3!",
-    // }
-  ]);
+  const [reviewList, setReviewList] = useState([]);
+  const [displayCreateReview, setDisplayCreateReview] = useState(false);
 
   useEffect(() => {
     async function getReviews() {
@@ -39,6 +19,12 @@ function Details() {
     }
     getReviews();
   }, []);
+
+  const createReviewButton = (
+    <Button onClick={() => setDisplayCreateReview(true)} bg="green" color="white" mb="7em" ml="20em">
+    + Add a Review
+    </Button>
+  );
 
   return (
     <VStack p="4">
@@ -63,15 +49,14 @@ function Details() {
             release_date <br />
           </Text>
         </Box>
-        <Button bg="green" color="white" mb="7em" ml="20em">
-          + Add a Review
-        </Button>
+        {createReviewButton}
       </HStack>
       <VStack>
+      {displayCreateReview && <CreateReview/>}
         <Text mt="5em" mr="60em" color="white">
-          Reviews{" "}
-          <Text bg="pink" color="red" borderRadius="5em">
-            {reviewList.length}
+          Reviews
+          <Text ml="1em" as="span" bg="pink" color="red" h="1" borderRadius="50%" p="1">
+            {Array(reviewList).length}
           </Text>
         </Text>
         {console.log(reviewList)}
@@ -87,4 +72,3 @@ function Details() {
     </VStack>
   );
 }
-export default Details;

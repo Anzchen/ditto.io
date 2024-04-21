@@ -36,7 +36,6 @@ function Home() {
           })
         }
       </HStack>
-      <SpotifyAPITesting/>
     </VStack>
   );
 }

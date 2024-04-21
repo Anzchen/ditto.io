@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { Text, Box } from "@chakra-ui/react";
 import StarRating from "./starRating";
 
-function ReviewItem(props) {
-  //set rating to a value of zero (0)
-  const [rating, setRating] = useState(0);
+export default function ReviewItem(props) {
+  const [rating, setRating] = useState(props.review.rating);
 
   return (
     <Box ml="2em" as="b" bg="white" w="100%" borderRadius=".5em">
@@ -12,7 +11,7 @@ function ReviewItem(props) {
         {props.review.reviewer}
         <br />
       </Text>
-      <StarRating rating={rating} setRating={setRating} />
+      <StarRating rating={rating} setRating={setRating}/>
       <Text color="black">
         {props.review.text}
         <br />
@@ -20,4 +19,3 @@ function ReviewItem(props) {
     </Box>
   );
 }
-export default ReviewItem;
