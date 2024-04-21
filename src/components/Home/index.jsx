@@ -29,7 +29,7 @@ function Home() {
   }, []);
   const accessToken = useAccessToken();
 
-  const tracks = useTracks(accessToken);
+  const tracks = useTracks(accessToken, topSongs);
   console.log(tracks);
 
   return (
