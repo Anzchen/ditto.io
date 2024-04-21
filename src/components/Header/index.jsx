@@ -4,12 +4,24 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { API_URL } from "../../consts";
 import { useNavigate, Link as ReachLink, Outlet } from "react-router-dom";
 import { HStack, Button, Input, InputGroup, InputLeftElement, useDisclosure } from '@chakra-ui/react';
+import Results from '../Results'; 
 
 function Header() {
   const navigate = useNavigate();
   const [user, setUser] = useState({});
   const [auth, setAuth] = useState(false);
   const { isOpen: searchOpen, onToggle: toggleSearch } = useDisclosure();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      navigate(`/results?query=${searchQuery}`);
+    }
+  };
 
   const getProfile = () => {
     fetch(`${API_URL}/profile`, {
@@ -79,6 +91,9 @@ function Header() {
             placeholder="Search for a song..."
             bg="white"
             borderRadius="2em"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            onKeyDown={handleSearchKeyDown}
           />
         </InputGroup>
       )}
@@ -86,6 +101,7 @@ function Header() {
       {button}
       {register}
     </HStack>
+    {/* {searchQuery && <Results searchQuery={searchQuery} />} */}
     <Outlet />
     </>
   );
