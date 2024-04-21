@@ -1,39 +1,31 @@
-import React, { useState, useEffect } from "react";
-import {
-  HStack,
-  Box,
-  Heading,
-  Button,
-  useToast,
-  List,
-  ListItem,
-  Text,
-  IconButton,
-} from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import * as client from "../../client.ts";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { Box, Heading, List, ListItem, Text, Button, useToast } from '@chakra-ui/react';
+import * as client from '../../client.ts';
+import { useNavigate } from 'react-router-dom';
 
 function Profile() {
   const [profile, setProfile] = useState({
-    username: "",
+    username: '',
     followers: [],
     following: [],
-    role: "USER",
+    role: 'USER',
   });
 
+  const { username } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
 
-  const fetchProfile = async () => {
+  const fetchProfile = async (username) => {
     try {
-      const userProfile = await client.profile();
+      const userProfile = await client.getUserByUsername(username);
       setProfile(userProfile);
     } catch (error) {
-      console.error("Error fetching profile:", error);
+      console.error('Error fetching profile:', error);
       toast({
-        title: "Error",
-        description: "Failed to fetch profile.",
-        status: "error",
+        title: 'Error',
+        description: 'Failed to fetch profile.',
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -41,64 +33,17 @@ function Profile() {
   };
 
   useEffect(() => {
-    fetchProfile();
-  }, []);
+    fetchProfile(username);
+  }, [username]);
 
-  // const { username } = useParams(); // Extract username from URL parameter
-
-  // const fetchProfile = async (username) => {
-  //   try {
-  //     const userProfile = await client.getUserProfile(username);
-  //     setProfile(userProfile);
-  //   } catch (error) {
-  //     console.error("Error fetching profile:", error);
-  //     toast({
-  //       title: "Error",
-  //       description: "Failed to fetch profile.",
-  //       status: "error",
-  //       duration: 3000,
-  //       isClosable: true,
-  //     });
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchProfile(username); // Fetch profile based on extracted username
-  // }, [username]); // Re-fetch profile when username changes
-
-  const goToEditProfile = () => {
-    navigate("/edit-profile");
+  const handleProfileClick = (clickedUsername) => {
+    console.log(`Navigating to profile: ${clickedUsername}`);
+    navigate(`/profile/${clickedUsername}`);
   };
 
-  const handleProfileClick = (username) => {
-    navigate(`/profile/${username}`);
-  };
+  const isCurrentUser = profile.username === 'current_user_username'; // Replace 'current_user_username' with actual username
 
-  const handleUnfollow = async (username) => {
-    try {
-      await client.unfollowUser(username);
-      setProfile((prevProfile) => ({
-        ...prevProfile,
-        following: prevProfile.following.filter((user) => user !== username),
-      }));
-      toast({
-        title: "Success",
-        description: `You have unfollowed ${username}.`,
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    } catch (error) {
-      console.error("Error unfollowing user:", error);
-      toast({
-        title: "Error",
-        description: "Failed to unfollow user.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
+  console.log('Profile state:', profile);
 
   return (
     <Box p="8" bg="transparent" color="white">
@@ -113,7 +58,7 @@ function Profile() {
               <Text
                 onClick={() => handleProfileClick(follower)}
                 cursor="pointer"
-                _hover={{ textDecoration: "underline" }}
+                _hover={{ textDecoration: 'underline' }}
               >
                 {follower}
               </Text>
@@ -126,22 +71,7 @@ function Profile() {
         <List>
           {profile.following.map((followingUser) => (
             <ListItem key={followingUser}>
-              <HStack>
-                <Text
-                  onClick={() => handleProfileClick(followingUser)}
-                  cursor="pointer"
-                  _hover={{ textDecoration: "underline" }}
-                >
-                  {followingUser}
-                </Text>
-                <IconButton
-                  // icon={<CloseIcon />}
-                  aria-label="Unfollow"
-                  size="sm"
-                  colorScheme="red"
-                  onClick={() => handleUnfollow(followingUser)}
-                />
-              </HStack>
+              <Text>{followingUser}</Text>
             </ListItem>
           ))}
         </List>
@@ -149,9 +79,12 @@ function Profile() {
       <Box mb="4">
         <strong>Role:</strong> {profile.role}
       </Box>
-      <Button colorScheme="purple" size="md" onClick={goToEditProfile} mr="4">
-        Edit Profile
-      </Button>
+      {/* Conditionally render Edit Profile button for the current user */}
+      {isCurrentUser && (
+        <Button colorScheme="purple" size="md" onClick={() => navigate('/edit-profile')} mr="4">
+          Edit Profile
+        </Button>
+      )}
     </Box>
   );
 }
