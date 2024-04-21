@@ -10,7 +10,7 @@ function Register() {
     username: "",
     password: "",
     phone_number: "",
-    role: "",
+    role: "USER",
     songs: [],
     following: [],
   });
