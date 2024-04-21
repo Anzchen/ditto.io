@@ -6,7 +6,7 @@ import Details from "./components/Details";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Register from "./components/Login/register";
-import Profile from "./components/Profile";
+import Profile from "./components/Profile/editProfile";
 import Results from "./components/Results";
 import AdminLogin from "./components/Login/adminLogin";
 
