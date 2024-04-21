@@ -6,14 +6,21 @@ import * as client from "../../client.ts";
 
 function Register() {
   const [error, setError] = useState("");
-  const [user, setUser] = useState({ username: "", password: "" });
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+    phone_number: "",
+    role: "",
+    songs: [],
+    following: [],
+  });
   const navigate = useNavigate();
   const signup = async () => {
     try {
       await client.signup(user);
       navigate("/profile");
     } catch (err) {
-      setError(err.response.data.message);
+      setError(JSON.stringify(err));
     }
   };
 
@@ -55,6 +62,33 @@ function Register() {
             setUser({
               ...user,
               password: e.target.value,
+            })
+          }
+        />
+        <Input
+          type="number"
+          placeholder="Phone Number"
+          variant="filled"
+          size="md"
+          mb="6"
+          value={user.phone_number}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              phone_number: e.target.value,
+            })
+          }
+        />
+        <Input
+          placeholder="songs"
+          variant="filled"
+          size="md"
+          mb="6"
+          value={user.songs}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              songs: e.target.value,
             })
           }
         />
