@@ -27,7 +27,7 @@ function App() {
           position="absolute" 
           width="100%" 
           bottom="0" 
-          // borderTopRadius="1em" 
+          borderTopRadius="1em" 
           bg="#2b2b3f"
         >
           <BrowserRouter>
