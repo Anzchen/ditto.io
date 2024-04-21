@@ -49,10 +49,10 @@ function Profile() {
 
   const saveProfile = async () => {
     try {
-      const updatedProfile = {};
-      editableFields.forEach((field) => {
-        updatedProfile[field] = profile[field];
-      });
+      const updatedProfile = profile;
+      // editableFields.forEach((field) => {
+      //   updatedProfile[field] = profile[field];
+      // });
       console.log(updatedProfile);
       await client.updateUser(updatedProfile);
       toast({
@@ -93,12 +93,18 @@ function Profile() {
   return (
     <Box p="8" bg="transparent" color="white">
       <Heading as="h2" size="lg" mb="6">
-      @{profile.username}'s Profile
+        @{profile.username}'s Profile
       </Heading>
       <form onSubmit={(e) => e.preventDefault()}>
         {editableFields.map((field) => (
           <FormControl key={field} mb="4">
-            <FormLabel>{field === "username" ? "Username" : field === "password" ? "Password" : "Phone Number"}</FormLabel>
+            <FormLabel>
+              {field === "username"
+                ? "Username"
+                : field === "password"
+                ? "Password"
+                : "Phone Number"}
+            </FormLabel>
             {field === "password" ? (
               <InputGroup>
                 <Input
@@ -106,7 +112,9 @@ function Profile() {
                   size="md"
                   type={showPassword ? "text" : "password"}
                   value={profile[field]}
-                  onChange={(e) => setProfile({ ...profile, [field]: e.target.value })}
+                  onChange={(e) =>
+                    setProfile({ ...profile, [field]: e.target.value })
+                  }
                   color="purple.800" // Set text color to dark purple
                 />
                 <InputRightElement width="4.5rem">
@@ -125,7 +133,9 @@ function Profile() {
                 size="md"
                 type={field === "password" ? "password" : "text"}
                 value={profile[field]}
-                onChange={(e) => setProfile({ ...profile, [field]: e.target.value })}
+                onChange={(e) =>
+                  setProfile({ ...profile, [field]: e.target.value })
+                }
                 color="purple.800" // Set text color to dark purple
               />
             )}
