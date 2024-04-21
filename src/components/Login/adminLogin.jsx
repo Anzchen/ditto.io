@@ -2,41 +2,25 @@ import React, { useState } from "react";
 import { Box, Heading, Input, Button, Link, Flex } from "@chakra-ui/react";
 import { API_URL } from "../../consts";
 import { useNavigate } from "react-router-dom";
+import * as client from "../../client.ts";
 
 function AdminLogin() {
+  const [error, setError] = useState("");
+  const [user, setUser] = useState({ username: "", password: "" });
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [adminKey, setAdminKey] = useState("");
-
-  const handleAdminLogin = () => {
-    fetch(`${API_URL}/admin-login`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password, adminKey }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          navigate("/admin-dashboard"); // redirect to admin dashboard on successful login
-        } else {
-          throw new Error("Admin login failed");
-        }
-      })
-      .catch((error) => {
-        console.error("Admin login error:", error);
-        // handle admin login error (ex. display error message)
-      });
+  const signin = async () => {
+    try {
+      await client.signup(user);
+      navigate("/profile"); // whatever the admin page is supposed to look like
+    } catch (err) {
+      setError(err.response.data.message);
+    }
   };
 
+  const [adminKey, setAdminKey] = useState("");
+
   return (
-    <Flex
-      align="center"
-      justify="center"
-      height="100vh"
-    >
+    <Flex align="center" justify="center" height="100vh">
       <Box
         width="400px"
         p="8"
@@ -53,8 +37,13 @@ function AdminLogin() {
           variant="filled"
           size="md"
           mb="4"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={user.username}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              username: e.target.value,
+            })
+          }
         />
         <Input
           type="password"
@@ -62,8 +51,13 @@ function AdminLogin() {
           variant="filled"
           size="md"
           mb="4"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={user.password}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              password: e.target.value,
+            })
+          }
         />
         <Input
           type="text"
@@ -74,12 +68,7 @@ function AdminLogin() {
           value={adminKey}
           onChange={(e) => setAdminKey(e.target.value)}
         />
-        <Button
-          colorScheme="purple" 
-          size="md"
-          onClick={handleAdminLogin}
-          mb="4" 
-        >
+        <Button colorScheme="purple" size="md" onClick={signin} mb="4">
           Log In as Admin
         </Button>
         <Box>

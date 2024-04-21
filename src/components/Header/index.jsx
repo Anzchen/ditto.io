@@ -41,6 +41,18 @@ function Header() {
     });
   }
 
+  const login = () => {
+    navigate('/login');
+  }
+
+  const signup = () => {
+    navigate('/register');
+  }
+
+  const profile = () => {
+    navigate('/profile');
+  }
+
   useEffect(getAuth, [navigate]);
   useEffect(getProfile, [navigate]);
 
@@ -49,14 +61,18 @@ function Header() {
       Logout
     </Button>
   ) : (
-    <Button bg="transparent" color="lightgray">
-      <ReachLink to="/login">Login</ReachLink>
+    <Button bg="transparent" color="lightgray" onClick={login}>
+      Login 
     </Button>
   );
 
-  const register = (
-    <Button bg="transparent" color="lightgray">
-      <ReachLink to={auth ? "/profile" : "/register"}>{auth ? "Profile" : "Sign Up"}</ReachLink>
+  const register = auth ? (
+    <Button bg="transparent" color="lightgray" onClick={profile}>
+      Profile
+    </Button>
+  ) : (
+    <Button bg="transparent" color="lightgray" onClick={signup}>
+      SignUp 
     </Button>
   );
 

@@ -2,42 +2,23 @@ import React, { useState } from "react";
 import { Box, Heading, Input, Button, Link, Flex } from "@chakra-ui/react";
 import { API_URL } from "../../consts";
 import { useNavigate } from "react-router-dom";
+import * as client from "../../client.ts";
 
 function Register() {
+  const [error, setError] = useState("");
+  const [user, setUser] = useState({ username: "", password: "" });
   const navigate = useNavigate();
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleRegister = () => {
-    fetch(`${API_URL}/register`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ fullName, email, username, password }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          navigate("/login"); // redirect to login page on successful registration
-        } else {
-          throw new Error("Registration failed");
-        }
-      })
-      .catch((error) => {
-        console.error("Registration error:", error);
-        // handle registration error (ex. display error message)
-      });
+  const signup = async () => {
+    try {
+      await client.signup(user);
+      navigate("/profile");
+    } catch (err) {
+      setError(err.response.data.message);
+    }
   };
 
   return (
-    <Flex
-      align="center"
-      justify="center"
-      height="100vh"
-    >
+    <Flex align="center" justify="center" height="100vh">
       <Box
         width="400px"
         p="8"
@@ -49,30 +30,19 @@ function Register() {
         <Heading as="h2" size="lg" mb="6" color="#13294C">
           Register
         </Heading>
-        <Input
-          placeholder="Full Name"
-          variant="filled"
-          size="md"
-          mb="4"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        />
-        <Input
-          placeholder="Email"
-          type="email"
-          variant="filled"
-          size="md"
-          mb="4"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        {error && <Box color="red">{error}</Box>}
         <Input
           placeholder="Username"
           variant="filled"
           size="md"
           mb="4"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={user.username}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              username: e.target.value,
+            })
+          }
         />
         <Input
           type="password"
@@ -80,15 +50,15 @@ function Register() {
           variant="filled"
           size="md"
           mb="6"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={user.password}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              password: e.target.value,
+            })
+          }
         />
-        <Button
-          colorScheme="purple"
-          size="md"
-          onClick={handleRegister}
-          mb="4"
-        >
+        <Button colorScheme="purple" size="md" onClick={signup} mb="4">
           Register
         </Button>
         <Box>
