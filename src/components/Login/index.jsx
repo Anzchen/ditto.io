@@ -2,41 +2,21 @@ import React, { useState } from "react";
 import { Box, Heading, Input, Button, Link, Flex } from "@chakra-ui/react";
 import { API_URL } from "../../consts";
 import { useNavigate } from "react-router-dom";
+import * as client from "../../client.ts";
 
 function Login() {
+  const [credentials, setCredentials] = useState({
+    username: "",
+    password: "",
+  });
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogin = () => {
-    fetch(`${API_URL}/login`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          navigate("/profile"); // redirect to profile page on successful login
-          return res.json();
-        } else {
-          throw new Error("Login failed");
-        }
-      })
-      .catch((error) => {
-        console.error("Login error:", error);
-        // handle login error (ex. display error message)
-      });
+  const signin = async () => {
+    await client.signin(credentials);
+    navigate("/profile");
   };
 
   return (
-    <Flex
-      align="center"
-      justify="center"
-      height="100vh"
-    >
+    <Flex align="center" justify="center" height="100vh">
       <Box
         width="400px"
         p="8"
@@ -45,7 +25,7 @@ function Login() {
         boxShadow="lg"
         textAlign="center"
       >
-        <Heading as="h2" size="lg" mb="6" color="#13294C"> 
+        <Heading as="h2" size="lg" mb="6" color="#13294C">
           Login
         </Heading>
         <Input
@@ -53,8 +33,10 @@ function Login() {
           variant="filled"
           size="md"
           mb="4"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={credentials.username}
+          onChange={(e) =>
+            setCredentials({ ...credentials, username: e.target.value })
+          }
         />
         <Input
           type="password"
@@ -62,15 +44,12 @@ function Login() {
           variant="filled"
           size="md"
           mb="6"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={credentials.password}
+          onChange={(e) =>
+            setCredentials({ ...credentials, password: e.target.value })
+          }
         />
-        <Button
-          colorScheme="purple"
-          size="md"
-          onClick={handleLogin}
-          mb="4" 
-        >
+        <Button colorScheme="purple" size="md" onClick={signin} mb="4">
           Sign In
         </Button>
         <Flex justify="space-between">
