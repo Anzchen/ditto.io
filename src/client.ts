@@ -1,13 +1,15 @@
 import axios from "axios";
+
 axios.defaults.withCredentials = true;
 
 // export const BASE_API = process.env.REACT_APP_API_BASE_URL;
 export const USERS_API = `http://localhost:3000`;
 
-export interface User { _id: string; username: string; password: string; role: string;
-  firstName: string, lastName: string };
-export const signin = async (credentials: User) => {
-  const response = await axios.post( `${USERS_API}/signin`, credentials );
+export const signin = async (username: string, password: string) => {
+  const response = await axios.post(`${USERS_API}/signin`, {
+    username: username,
+    password: password,
+  });
   return response.data;
 };
 export const profile = async () => {
@@ -27,8 +29,7 @@ export const createUser = async (user: any) => {
   return response.data;
 };
 export const deleteUser = async (user: any) => {
-  const response = await axios.delete(
-    `${USERS_API}/${user._id}`);
+  const response = await axios.delete(`${USERS_API}/${user._id}`);
   return response.data;
 };
 export const signup = async (user: any) => {

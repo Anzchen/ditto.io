@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Heading, Input, Button, Link, Flex } from "@chakra-ui/react";
 import { API_URL } from "../../consts";
 import { useNavigate } from "react-router-dom";
+import * as client from "../../client.ts";
 
 function AdminLogin() {
   const [error, setError] = useState("");
@@ -19,11 +20,7 @@ function AdminLogin() {
   const [adminKey, setAdminKey] = useState("");
 
   return (
-    <Flex
-      align="center"
-      justify="center"
-      height="100vh"
-    >
+    <Flex align="center" justify="center" height="100vh">
       <Box
         width="400px"
         p="8"
@@ -40,9 +37,13 @@ function AdminLogin() {
           variant="filled"
           size="md"
           mb="4"
-          value={user.username} 
-          onChange={(e) => setUser({
-            ...user, username: e.target.value })}
+          value={user.username}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              username: e.target.value,
+            })
+          }
         />
         <Input
           type="password"
@@ -50,9 +51,13 @@ function AdminLogin() {
           variant="filled"
           size="md"
           mb="4"
-          value={user.password} 
-          onChange={(e) => setUser({
-            ...user, password: e.target.value })}
+          value={user.password}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              password: e.target.value,
+            })
+          }
         />
         <Input
           type="text"
@@ -63,12 +68,7 @@ function AdminLogin() {
           value={adminKey}
           onChange={(e) => setAdminKey(e.target.value)}
         />
-        <Button
-          colorScheme="purple" 
-          size="md"
-          onClick={signin}
-          mb="4" 
-        >
+        <Button colorScheme="purple" size="md" onClick={signin} mb="4">
           Log In as Admin
         </Button>
         <Box>
