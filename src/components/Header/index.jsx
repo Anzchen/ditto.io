@@ -53,6 +53,10 @@ function Header() {
     navigate('/profile');
   }
 
+  const details = () => {
+    navigate('/details');
+  }
+
   useEffect(getAuth, [navigate]);
   useEffect(getProfile, [navigate]);
 
@@ -73,6 +77,12 @@ function Header() {
   ) : (
     <Button bg="transparent" color="lightgray" onClick={signup}>
       SignUp 
+    </Button>
+  );
+
+  const detailsButton = (
+    <Button onClick={details} bg="lightgray">
+      Details
     </Button>
   );
 
@@ -99,6 +109,7 @@ function Header() {
         </InputGroup>
       )}
       {searchButton}
+      {detailsButton}
       {button}
       {register}
     </HStack>

@@ -21,11 +21,10 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       
-      <Box height="10vh" position="relative" bg="#1A1A2E">
-      </Box>
+      <Box minH="100vh" position="relative" bg="#1A1A2E">
         <Box 
-          // height="100vh" 
-          position="relative" 
+          height="89vh" 
+          position="absolute" 
           width="100%" 
           bottom="0" 
           // borderTopRadius="1em" 
@@ -45,6 +44,7 @@ function App() {
                 <Route path="/admin-login" element={<AdminLogin />} />
               </Routes>
           </BrowserRouter>
+        </Box>
         </Box>
     </ChakraProvider>
   );
