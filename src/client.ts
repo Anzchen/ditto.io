@@ -3,7 +3,7 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 // export const BASE_API = process.env.REACT_APP_API_BASE_URL;
-export const USERS_API = `http://localhost:4000`;
+export const USERS_API = `http://localhost:4000/api/users`;
 
 export const signin = async (username: string, password: string) => {
   const response = await axios.post(`${USERS_API}/signin`, {
