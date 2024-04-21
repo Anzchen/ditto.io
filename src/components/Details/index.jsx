@@ -74,7 +74,7 @@ function Details() {
             {reviewList.length}
           </Text>
         </Text>
-        {reviewList.map((review) => {
+        {Array(reviewList).map((review) => {
           return <ReviewItem key={review.song_id} review={review} />;
         })}
       </VStack>
