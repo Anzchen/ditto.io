@@ -12,7 +12,7 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import * as client from "../../client.js";
+import * as client from "../../client.ts";
 
 function EditProfile() {
   const [profile, setProfile] = useState({
