@@ -9,12 +9,12 @@ function ReviewItem(props) {
   return (
     <Box ml="2em" as="b" bg="white" w="100%" borderRadius=".5em">
       <Text color="black">
-        {props.review.data[0].reviewer}
+        {props.review.reviewer}
         <br />
       </Text>
       <StarRating rating={rating} setRating={setRating} />
       <Text color="black">
-        {props.review.data[0].text}
+        {props.review.text}
         <br />
       </Text>
     </Box>

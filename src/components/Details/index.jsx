@@ -35,7 +35,7 @@ function Details() {
       const reviews = await axios.get(
         `http://localhost:4000/api/reviews/songs/${songid}`
       );
-      setReviewList(reviews);
+      setReviewList(reviews.data[0]);
     }
     getReviews();
   }, []);
@@ -74,9 +74,15 @@ function Details() {
             {reviewList.length}
           </Text>
         </Text>
-        {Array(reviewList).map((review) => {
-          return <ReviewItem review={review} />;
-        })}
+        {console.log(reviewList)}
+        {console.log(Array(reviewList).length)}
+        {Array(reviewList).length > 0 ? (
+          Array(reviewList).map((review) => {
+            return <ReviewItem review={review} />;
+          })
+        ) : (
+          <Text color="white">No reviews available.</Text>
+        )}
       </VStack>
     </VStack>
   );
