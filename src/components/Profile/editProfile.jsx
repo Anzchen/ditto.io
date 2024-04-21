@@ -77,7 +77,7 @@ function EditProfile() {
   const signout = async () => {
     try {
       await client.signout();
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.error("Error signing out:", error);
       toast({
