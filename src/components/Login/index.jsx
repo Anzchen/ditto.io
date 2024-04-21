@@ -5,13 +5,11 @@ import { useNavigate } from "react-router-dom";
 import * as client from "../../client.ts";
 
 function Login() {
-  const [credentials, setCredentials] = useState({
-    username: "",
-    password: "",
-  });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const signin = async () => {
-    await client.signin(credentials);
+    await client.signin(username, password);
     navigate("/profile");
   };
 
@@ -33,10 +31,8 @@ function Login() {
           variant="filled"
           size="md"
           mb="4"
-          value={credentials.username}
-          onChange={(e) =>
-            setCredentials({ ...credentials, username: e.target.value })
-          }
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
         <Input
           type="password"
@@ -44,10 +40,8 @@ function Login() {
           variant="filled"
           size="md"
           mb="6"
-          value={credentials.password}
-          onChange={(e) =>
-            setCredentials({ ...credentials, password: e.target.value })
-          }
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <Button colorScheme="purple" size="md" onClick={signin} mb="4">
           Sign In
