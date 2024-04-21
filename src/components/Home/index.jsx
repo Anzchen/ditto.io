@@ -22,10 +22,6 @@ function Home() {
         const userData = await res.json();
         setUser(userData);
         setTopSongs(userData.songs || []);
-        // const loggedIn = await axios.get(
-        //   "http://localhost:4000/api/users/isLoggedIn"
-        // );
-        // setIsLoggedIn(loggedIn.data);
         setIsLoggedIn(true);
       } catch (error) {
         setIsLoggedIn(false);
@@ -44,7 +40,6 @@ function Home() {
       <HStack mt="7em" mr="45em">
         <Discover />
         {user && <Message user={user} isLoggedIn={isLoggedIn} />}
-        {/* user && <Message user={user} loggedIn={isLoggedIn} /> */}
       </HStack>
       {isLoggedIn ? (
         <HStack>
