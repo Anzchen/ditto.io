@@ -1,91 +1,160 @@
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Heading,
+  Input,
+  Button,
+  useToast,
+  FormControl,
+  FormLabel,
+  FormHelperText,
+  InputGroup,
+  InputRightElement,
+} from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import * as client from "../../client.ts";
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 
-export default function Profile() {
+function Profile() {
   const [profile, setProfile] = useState({
     username: "",
     password: "",
-    firstName: "",
-    lastName: "",
-    dob: "",
-    email: "",
-    role: "USER",
+    phone_number: "",
   });
+
+  const [editableFields] = useState(["username", "password", "phone_number"]);
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
+  const toast = useToast();
+
   const fetchProfile = async () => {
-    const account = await client.profile();
-    setProfile(account);
+    try {
+      const account = await client.profile();
+      setProfile(account);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch profile.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
+
   useEffect(() => {
     fetchProfile();
   }, []);
-  const save = async () => {
-    await client.updateUser(profile);
+
+  const saveProfile = async () => {
+    try {
+      const updatedProfile = profile;
+      // editableFields.forEach((field) => {
+      //   updatedProfile[field] = profile[field];
+      // });
+      console.log(updatedProfile);
+      await client.updateUser(updatedProfile);
+      toast({
+        title: "Success",
+        description: "Profile updated successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update profile.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
+
   const signout = async () => {
-    await client.signout();
-    navigate("/signin");
+    try {
+      await client.signout();
+      navigate("/login");
+    } catch (error) {
+      console.error("Error signing out:", error);
+      toast({
+        title: "Error",
+        description: "Failed to sign out.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
+
   return (
-    <div>
-      <h1>Profile</h1>
-      {profile && (
-        <div>
-          <input
-            value={profile.username}
-            onChange={(e) =>
-              setProfile({ ...profile, username: e.target.value })
-            }
-          />
-          <br />
-          <input
-            value={profile.password}
-            onChange={(e) =>
-              setProfile({ ...profile, password: e.target.value })
-            }
-          />
-          <br />
-          <input
-            value={profile.firstName}
-            onChange={(e) =>
-              setProfile({ ...profile, firstName: e.target.value })
-            }
-          />
-          <br />
-          <input
-            value={profile.lastName}
-            onChange={(e) =>
-              setProfile({ ...profile, lastName: e.target.value })
-            }
-          />
-          <br />
-          <input
-            value={profile.dob}
-            type="date"
-            onChange={(e) => setProfile({ ...profile, dob: e.target.value })}
-          />
-          <br />
-          <input
-            value={profile.email}
-            onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-          />
-          <br />
-          <select
-            onChange={(e) => setProfile({ ...profile, role: e.target.value })}
-          >
-            <br />
-            <option value="USER">User</option>
-            <option value="ADMIN">Admin</option>
-          </select>
-        </div>
-      )}
-      <button className="btn btn-primary" onClick={save}>
-        Save
-      </button>
-      <button className="btn btn-danger" onClick={signout}>
-        Signout
-      </button>
-    </div>
+    <Box p="8" bg="transparent" color="white">
+      <Heading as="h2" size="lg" mb="6">
+        @{profile.username}'s Profile
+      </Heading>
+      <form onSubmit={(e) => e.preventDefault()}>
+        {editableFields.map((field) => (
+          <FormControl key={field} mb="4">
+            <FormLabel>
+              {field === "username"
+                ? "Username"
+                : field === "password"
+                ? "Password"
+                : "Phone Number"}
+            </FormLabel>
+            {field === "password" ? (
+              <InputGroup>
+                <Input
+                  variant="filled"
+                  size="md"
+                  type={showPassword ? "text" : "password"}
+                  value={profile[field]}
+                  onChange={(e) =>
+                    setProfile({ ...profile, [field]: e.target.value })
+                  }
+                  color="purple.800" // Set text color to dark purple
+                />
+                <InputRightElement width="4.5rem">
+                  <Button
+                    h="1.75rem"
+                    size="sm"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            ) : (
+              <Input
+                variant="filled"
+                size="md"
+                type={field === "password" ? "password" : "text"}
+                value={profile[field]}
+                onChange={(e) =>
+                  setProfile({ ...profile, [field]: e.target.value })
+                }
+                color="purple.800" // Set text color to dark purple
+              />
+            )}
+            <FormHelperText>
+              {field === "password"
+                ? "Leave blank to keep current password"
+                : null}
+            </FormHelperText>
+          </FormControl>
+        ))}
+        <Button colorScheme="green" size="md" onClick={saveProfile} mr="4">
+          Save
+        </Button>
+        <Button colorScheme="red" size="md" onClick={signout}>
+          Sign out
+        </Button>
+      </form>
+    </Box>
   );
 }
+
+export default Profile;
