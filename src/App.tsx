@@ -34,7 +34,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Header />}>
                 <Route index element={<Home />} />
-                <Route path="details" element={<Details />} />
+                <Route path="/details/:songId" element={<Details />} />
                 <Route path="profile" element={<Profile />} />
                 <Route path="results" element={<Results />} />
               </Route>

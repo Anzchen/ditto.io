@@ -7,7 +7,7 @@ function Song(props) {
 
   const handleSongClick = () => {
     // Redirect to the review page when song box is clicked
-    navigate(`/reviews/${props.song.id}`);
+    navigate(`/details/${props.song.id}`);
   };
 
   return (

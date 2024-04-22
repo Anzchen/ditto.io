@@ -67,6 +67,10 @@ function Header() {
     navigate("/");
   };
 
+  const details = () => {
+    navigate("/details");
+  }
+
   useEffect(getAuth, [navigate]);
   useEffect(getProfile, [navigate]);
 
@@ -128,6 +132,7 @@ function Header() {
           </InputGroup>
         )}
         {searchButton}
+        {detailsButton}
         {button}
         {register}
       </HStack>
