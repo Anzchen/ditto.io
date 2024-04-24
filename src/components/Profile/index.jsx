@@ -69,10 +69,33 @@ function Profile() {
     navigate(`/profile/${clickedUsername}`);
   };
 
-  async function handleUnfollow(username) {
-    await client.unfollowUser(username);
-    console.log("je;p");
-  }
+  const handleUnfollow = async (username) => {
+    try {
+      // Call API to unfollow the user
+      await client.unfollowUser(username);
+      // Update local state to remove the user from following list
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        following: prevProfile.following.filter((user) => user !== username),
+      }));
+      toast({
+        title: "Success",
+        description: `You have unfollowed ${username}.`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error unfollowing user:", error);
+      toast({
+        title: "Error",
+        description: "Failed to unfollow user.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
   const isCurrentUser = ourprofile.username === username; // Replace 'current_user_username' with actual username
 
@@ -108,7 +131,13 @@ function Profile() {
               display="flex"
               alignItems="center"
             >
-              <Text>{followingUser}</Text>
+              <Text
+              onClick={() => handleProfileClick(followingUser)}
+              cursor="pointer"
+              _hover={{ textDecoration: "underline" }}
+              >
+              {followingUser}
+              </Text>
               {isCurrentUser && (
                 <Button
                   size="sm"
