@@ -8,28 +8,35 @@ import useTracks from "../../api/getTracks";
 import useAccessToken from "../../api/getAccessToken";
 import { useInstantTransition } from "framer-motion";
 import axios from "axios";
+import LogoutEmitter from "../../emit/LogoutEmitter";
+
 function Home() {
   const [user, setUser] = useState({});
   const [topSongs, setTopSongs] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  function logout() {
+    setIsLoggedIn(false);
+  }
+  LogoutEmitter.on("loggedOut", logout);
   useEffect(() => {
     const getProfile = async () => {
       try {
-        const res = await fetch(`http://localhost:4000/api/users/profile`, {
-          method: "POST",
-          credentials: "include",
-        });
-        const userData = await res.json();
-        setUser(userData);
-        setTopSongs(userData.songs || []);
-        setIsLoggedIn(true);
+        const res = await axios.post("http://localhost:4000/api/users/profile");
+        const isUser = res.data;
+        if (isUser) {
+          setUser(isUser);
+          setTopSongs(isUser.songs);
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
       } catch (error) {
         setIsLoggedIn(false);
         console.error("Error fetching user profile:", error);
       }
     };
     getProfile();
-  }, []);
+  }, [setUser]);
   const accessToken = useAccessToken();
 
   const tracks = useTracks(accessToken, topSongs);
