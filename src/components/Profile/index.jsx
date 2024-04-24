@@ -7,6 +7,7 @@ import {
   ListItem,
   Text,
   Button,
+  IconButton,
   useToast,
 } from "@chakra-ui/react";
 import * as client from "../../client.ts";
@@ -102,17 +103,19 @@ function Profile() {
         <strong>Following:</strong>
         <List>
           {profile.following.map((followingUser) => (
-            <ListItem key={followingUser}>
+            <ListItem
+              key={followingUser}
+              display="flex"
+              alignItems="center"
+            >
               <Text>{followingUser}</Text>
-              {isCurrentUser ? (
+              {isCurrentUser && (
                 <Button
-                  ml={2}
-                  onClick={() => handleUnfollow(followingUser.username)}
-                >
-                  unfollow
-                </Button>
-              ) : (
-                <></>
+                  size="sm"
+                  colorScheme="red"
+                  onClick={() => handleUnfollow(followingUser)}
+                  ml="4" 
+                > Unfollow </Button>
               )}
             </ListItem>
           ))}
