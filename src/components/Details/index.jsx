@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { VStack, HStack, Box, Image, Text, Button, Flex } from "@chakra-ui/react";
+import {
+  VStack,
+  HStack,
+  Box,
+  Image,
+  Text,
+  Button,
+  Flex,
+} from "@chakra-ui/react";
 import ReviewItem from "./ReviewItem/";
 import CreateReview from "./CreateReview";
 import axios from "axios";
@@ -10,65 +18,93 @@ import Song from "../Song";
 
 export default function Details() {
   const { songId } = useParams(); // Extract songid from URL params
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState("");
   // const [song, setSong] = useState(null);
   const [reviewList, setReviewList] = useState([]);
   const [displayCreateReview, setDisplayCreateReview] = useState(false);
+  // const [tracks, setTracks] = useState([]);
 
   // useEffect(() => {
-  // async function fetchSongDetails() {
-  //   try {
-  //     // Fetch song details using songid from API
-  //     const response = await axios.get(`http://localhost:4000/api/songs/${songId}`);
-  //     setSong(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching song details:", error);
+  //   async function getAccessToken() {
+  //     try {
+  //       await fetch("https://accounts.spotify.com/api/token", {
+  //         body: "grant_type=client_credentials&client_id=2825a9fb713340c784dddba2c67a5213&client_secret=fea9bac4ca6f4988a89b76ead0579514",
+  //         headers: {
+  //           "Content-Type": "application/x-www-form-urlencoded",
+  //         },
+  //         method: "POST",
+  //       })
+  //         .then((res) => res.json())
+  //         .then((data) => {
+  //           setToken(data.access_token);
+  //         });
+  //       // Fetch reviews for the song using songid
+  //       console.log("token" + token);
+  //     } catch (error) {
+  //       console.error("Error fetching access token:", error);
+  //     }
   //   }
-  // }
+
+  //   async function fetchReviews() {
+  //     try {
+  //       // Fetch reviews for the song using songid
+  //       const reviews = await axios.get(
+  //         `http://localhost:4000/api/reviews/songs/${songId}`
+  //       );
+  //       setReviewList(reviews.data);
+  //     } catch (error) {
+  //       console.error("Error fetching reviews:", error);
+  //     }
+  //   }
+
+  //   async function getTracks() {
+  //     console.error("get tracks : token: " + token);
+  //     if (token) {
+  //       await fetch(`https://api.spotify.com/v1/tracks?ids=${[songId]}`, {
+  //         method: "GET",
+  //         headers: {
+  //           Authorization: "Bearer " + token,
+  //         },
+  //       })
+  //         .then((response) => response.json())
+  //         .then((data) => {
+  //           setTracks(data.tracks);
+  //         })
+  //         .catch((error) => {
+  //           console.error("Error fetching tracks:", error);
+  //         });
+  //     }
+  //   }
+
+  //   getAccessToken();
+  //   fetchReviews();
+  //   getTracks();
+  // }, []);
+
   useEffect(() => {
-    // async function fetchSongDetails() {
+    // const getProfile = async () => {
     //   try {
-    //     // Fetch song details using songid from API
-    //     const response = await axios.get(`http://localhost:4000/api/songs/${songId}`);
-    //     setSong(response.data);
+    //     const res = await axios.post("http://localhost:4000/api/users/profile");
+    //     const isUser = res.data;
+    //     if (isUser) {
+    //       setUser(isUser);
+    //       setTopSongs(isUser.songs);
+    //       setIsLoggedIn(true);
+    //       LogoutEmitter.on("loggedOut", logout);
+    //     } else {
+    //       setIsLoggedIn(false);
+    //     }
     //   } catch (error) {
-    //     console.error("Error fetching song details:", error);
+    //     setIsLoggedIn(false);
+    //     console.error("Error fetching user profile:", error);
     //   }
-    // }
-
-    async function getAccessToken() {
-      try {
-        // Fetch reviews for the song using songid
-        const reviews = await axios.get(`http://localhost:4000/api/reviews/users/accessToken`);
-        setToken(reviews.data);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-      }
-    }
-
-    async function fetchReviews() {
-      try {
-        // Fetch reviews for the song using songid
-        const reviews = await axios.get(`http://localhost:4000/api/reviews/songs/${songId}`);
-        setReviewList(reviews.data);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-      }
-    }
-
-    // if (songId) {
-    //   // fetchSongDetails();
-    //   fetchReviews();
-    // }
+    // };
+    // getProfile();
   }, []);
-
   const accessToken = useAccessToken();
 
-  const list = [songId];
-
-  console.log(accessToken);
-  const trackInfo = useTracks(accessToken, list);
-  console.log(trackInfo.at(0));
+  const tracks = useTracks(accessToken, [songId]);
+  console.log(tracks);
 
   const createReviewButton = (
     <Button
@@ -81,12 +117,22 @@ export default function Details() {
     </Button>
   );
 
+  function returnSong(tracks) {
+    <Song key={songId} song={tracks} />;
+  }
+
   return (
     <VStack p="4">
-      {trackInfo && (
+      {tracks && (
         <HStack mt="2em">
           <Box width="18em" height="20em" bg="white" p="4" borderRadius="1em">
-            <Song key={songId} song={trackInfo.at(0)} />
+            {tracks.length > 0 ? (
+              tracks.map((song) => {
+                return <Song key={song.song_id} song={song} />;
+              })
+            ) : (
+              <Text color="white">No songs available.</Text>
+            )}
           </Box>
           <Box color="green" p="3" ml="5em">
             <Text>
