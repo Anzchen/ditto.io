@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Box, Heading, Input, Button, Link, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Input,
+  Button,
+  Link,
+  Flex,
+  useToast,
+} from "@chakra-ui/react";
 import { API_URL } from "../../consts";
 import { useNavigate } from "react-router-dom";
 import * as client from "../../client.ts";
@@ -8,9 +16,22 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const toast = useToast();
+
   const signin = async () => {
-    await client.signin(username, password);
-    navigate("/profile");
+    try {
+      await client.signin(username, password);
+      navigate("/profile");
+    } catch (error) {
+      toast({
+        title: "Signin Failed",
+        description: "Please check your credentials.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }
   };
 
   return (

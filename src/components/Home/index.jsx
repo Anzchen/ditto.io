@@ -8,11 +8,16 @@ import useTracks from "../../api/getTracks";
 import useAccessToken from "../../api/getAccessToken";
 import { useInstantTransition } from "framer-motion";
 import axios from "axios";
+import LogoutEmitter from "../../emit/LogoutEmitter";
+
 function Home() {
   const [user, setUser] = useState({});
   const [topSongs, setTopSongs] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  function logout() {
+    setIsLoggedIn(false);
+  }
+  LogoutEmitter.on("loggedOut", logout);
   useEffect(() => {
     const getProfile = async () => {
       try {
