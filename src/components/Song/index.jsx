@@ -21,18 +21,18 @@ function Song(props) {
       p="1em"
       boxShadow="md"
       cursor="pointer" // Add cursor pointer for clickable effect
-      onClick={handleSongClick} 
+      onClick={handleSongClick}
     >
       {/* Album Cover */}
       <Image
-        src={props.song.album.images[0].url} 
-        alt={props.song.album.name} 
+        src={props.song.album.images[0].url}
+        alt={props.song.album.name}
         borderRadius=".5em"
         mb="0.5em"
       />
 
       {/* Song Title */}
-      <Text fontWeight="bold" color="black" fontSize="lg" > 
+      <Text fontWeight="bold" color="black" fontSize="lg">
         {props.song.name}
       </Text>
 
@@ -46,8 +46,7 @@ function Song(props) {
 
 export default Song;
 
-
-
-{/* here's a link to all the things we can get from a song:
-      https://developer.spotify.com/documentation/web-api/reference/get-several-tracks  */}
-
+{
+  /* here's a link to all the things we can get from a song:
+      https://developer.spotify.com/documentation/web-api/reference/get-several-tracks  */
+}

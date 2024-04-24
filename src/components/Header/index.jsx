@@ -72,7 +72,7 @@ function Header() {
     getProfile();
   }, [navigate]);
 
-  const button = auth ? (
+  const loginButton = auth ? (
     <Button bg="transparent" color="lightgray" onClick={logout}>
       Logout
     </Button>
@@ -88,7 +88,7 @@ function Header() {
     </Button>
   );
 
-  const register = auth ? (
+  const registerButton = auth ? (
     <Button bg="transparent" color="lightgray" onClick={profile}>
       Profile
     </Button>
@@ -131,8 +131,8 @@ function Header() {
         {searchButton}
         {home}
         {/* {detailsButton} */}
-        {button}
-        {register}
+        {loginButton}
+        {registerButton}
       </HStack>
       <Outlet />
     </>
