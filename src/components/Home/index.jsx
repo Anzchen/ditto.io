@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext, useContext } from "react";
 import { VStack, HStack, Text } from "@chakra-ui/react";
 import Discover from "./Discover/";
 import Message from "./Message/";
@@ -53,7 +53,7 @@ function Home() {
         <HStack>
           {tracks.length > 0 ? (
             tracks.map((song) => {
-              return <Song key={song.song_id} song={song} />;
+              return <Song key={song.song_id} song={song}/>;
             })
           ) : (
             <Text color="white">No songs available.</Text>

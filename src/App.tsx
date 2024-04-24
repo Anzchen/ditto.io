@@ -9,7 +9,11 @@ import Register from "./components/Login/register";
 import Profile from "./components/Profile";
 import Results from "./components/Results";
 import AdminLogin from "./components/Login/adminLogin";
+
 import EditProfile from "./components/Profile/editProfile";
+
+import useAccessToken from "./api/getAccessToken";
+
 
 function App() {
   const theme = extendTheme({
