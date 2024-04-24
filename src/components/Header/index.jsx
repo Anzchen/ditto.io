@@ -10,6 +10,7 @@ import {
   InputGroup,
   InputLeftElement,
   useDisclosure,
+  StepStatus,
 } from "@chakra-ui/react";
 import axios from "axios";
 import LogoutEmitter from "../../emit/LogoutEmitter";
@@ -17,6 +18,7 @@ import LogoutEmitter from "../../emit/LogoutEmitter";
 function Header() {
   const navigate = useNavigate();
   const [auth, setAuth] = useState(false);
+  const [user, setUser] = useState({});
   const { isOpen: searchOpen, onToggle: toggleSearch } = useDisclosure();
 
   const logout = async () => {
@@ -40,7 +42,7 @@ function Header() {
   };
 
   const profile = () => {
-    navigate("/profile/${username}");
+    navigate(`/profile/${user.username}`);
   };
 
   const goHome = () => {
@@ -58,6 +60,7 @@ function Header() {
         const isUser = res.data;
         if (isUser) {
           setAuth(true);
+          setUser(isUser);
         } else {
           setAuth(false);
         }
