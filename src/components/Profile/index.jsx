@@ -1,15 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Box, Heading, List, ListItem, Text, Button, useToast } from '@chakra-ui/react';
-import * as client from '../../client.ts';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import {
+  Box,
+  Heading,
+  List,
+  ListItem,
+  Text,
+  Button,
+  useToast,
+} from "@chakra-ui/react";
+import * as client from "../../client.ts";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const [profile, setProfile] = useState({
-    username: '',
+    username: "",
     followers: [],
     following: [],
-    role: 'USER',
+    role: "USER",
   });
 
   const { username } = useParams();
@@ -18,14 +26,14 @@ function Profile() {
 
   const fetchProfile = async (username) => {
     try {
-      const userProfile = await client.getUserByUsername(username);
+      const userProfile = await client.profile();
       setProfile(userProfile);
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      console.error("Error fetching profile:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to fetch profile.',
-        status: 'error',
+        title: "Error",
+        description: "Failed to fetch profile.",
+        status: "error",
         duration: 3000,
         isClosable: true,
       });
@@ -41,9 +49,9 @@ function Profile() {
     navigate(`/profile/${clickedUsername}`);
   };
 
-  const isCurrentUser = profile.username === 'current_user_username'; // Replace 'current_user_username' with actual username
+  const isCurrentUser = profile.username === username; // Replace 'current_user_username' with actual username
 
-  console.log('Profile state:', profile);
+  console.log("Profile state:", profile);
 
   return (
     <Box p="8" bg="transparent" color="white">
@@ -58,7 +66,7 @@ function Profile() {
               <Text
                 onClick={() => handleProfileClick(follower)}
                 cursor="pointer"
-                _hover={{ textDecoration: 'underline' }}
+                _hover={{ textDecoration: "underline" }}
               >
                 {follower}
               </Text>
@@ -81,7 +89,12 @@ function Profile() {
       </Box>
       {/* Conditionally render Edit Profile button for the current user */}
       {isCurrentUser && (
-        <Button colorScheme="purple" size="md" onClick={() => navigate('/edit-profile')} mr="4">
+        <Button
+          colorScheme="purple"
+          size="md"
+          onClick={() => navigate("/edit-profile")}
+          mr="4"
+        >
           Edit Profile
         </Button>
       )}

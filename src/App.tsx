@@ -35,7 +35,9 @@ function App() {
               <Route path="/" element={<Header />}>
                 <Route index element={<Home />} />
                 <Route path="/details/:songId" element={<Details />} />
-                <Route path="profile" element={<Profile />} />
+                <Route path="profile/:username" element={<Profile />} />
+                <Route path="edit-profile" element={<EditProfile />} />
+
                 <Route path="results" element={<Results />} />
               </Route>
               <Route path="login" element={<Login />} />

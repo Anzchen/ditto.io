@@ -21,7 +21,7 @@ function Login() {
   const signin = async () => {
     try {
       await client.signin(username, password);
-      navigate("/profile");
+      navigate("/profile/" + username);
     } catch (error) {
       toast({
         title: "Signin Failed",
