@@ -108,7 +108,6 @@ function Header() {
   return (
     <>
       <HStack m="3" position="fixed" right="0">
-        {home}
         {searchOpen && (
           <InputGroup position="fixed" width="50em" left="0" ml="10em">
             <InputLeftElement
@@ -125,7 +124,8 @@ function Header() {
           </InputGroup>
         )}
         {searchButton}
-        {detailsButton}
+        {home}
+        {/* {detailsButton} */}
         {button}
         {register}
       </HStack>
