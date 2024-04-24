@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   VStack,
   HStack,
@@ -11,147 +11,123 @@ import {
 import ReviewItem from "./ReviewItem/";
 import CreateReview from "./CreateReview";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import useAccessToken from "../../api/getAccessToken";
 import useTracks from "../../api/getTracks";
-import Song from "../Song";
 
 export default function Details() {
   const { songId } = useParams(); // Extract songid from URL params
-  const [token, setToken] = useState("");
-  // const [song, setSong] = useState(null);
   const [reviewList, setReviewList] = useState([]);
   const [displayCreateReview, setDisplayCreateReview] = useState(false);
-  // const [tracks, setTracks] = useState([]);
+  const [auth, setAuth] = useState(false);
 
-  // useEffect(() => {
-  //   async function getAccessToken() {
-  //     try {
-  //       await fetch("https://accounts.spotify.com/api/token", {
-  //         body: "grant_type=client_credentials&client_id=2825a9fb713340c784dddba2c67a5213&client_secret=fea9bac4ca6f4988a89b76ead0579514",
-  //         headers: {
-  //           "Content-Type": "application/x-www-form-urlencoded",
-  //         },
-  //         method: "POST",
-  //       })
-  //         .then((res) => res.json())
-  //         .then((data) => {
-  //           setToken(data.access_token);
-  //         });
-  //       // Fetch reviews for the song using songid
-  //       console.log("token" + token);
-  //     } catch (error) {
-  //       console.error("Error fetching access token:", error);
-  //     }
-  //   }
-
-  //   async function fetchReviews() {
-  //     try {
-  //       // Fetch reviews for the song using songid
-  //       const reviews = await axios.get(
-  //         `http://localhost:4000/api/reviews/songs/${songId}`
-  //       );
-  //       setReviewList(reviews.data);
-  //     } catch (error) {
-  //       console.error("Error fetching reviews:", error);
-  //     }
-  //   }
-
-  //   async function getTracks() {
-  //     console.error("get tracks : token: " + token);
-  //     if (token) {
-  //       await fetch(`https://api.spotify.com/v1/tracks?ids=${[songId]}`, {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: "Bearer " + token,
-  //         },
-  //       })
-  //         .then((response) => response.json())
-  //         .then((data) => {
-  //           setTracks(data.tracks);
-  //         })
-  //         .catch((error) => {
-  //           console.error("Error fetching tracks:", error);
-  //         });
-  //     }
-  //   }
-
-  //   getAccessToken();
-  //   fetchReviews();
-  //   getTracks();
-  // }, []);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // const getProfile = async () => {
-    //   try {
-    //     const res = await axios.post("http://localhost:4000/api/users/profile");
-    //     const isUser = res.data;
-    //     if (isUser) {
-    //       setUser(isUser);
-    //       setTopSongs(isUser.songs);
-    //       setIsLoggedIn(true);
-    //       LogoutEmitter.on("loggedOut", logout);
-    //     } else {
-    //       setIsLoggedIn(false);
-    //     }
-    //   } catch (error) {
-    //     setIsLoggedIn(false);
-    //     console.error("Error fetching user profile:", error);
-    //   }
-    // };
-    // getProfile();
-  }, []);
-  const accessToken = useAccessToken();
+    const getProfile = async () => {
+      try {
+        const res = await axios.post("http://localhost:4000/api/users/profile");
+        const isUser = res.data;
+        if (isUser) {
+          setAuth(true);
+        } else {
+          setAuth(false);
+        }
+      } catch (error) {
+        console.error(error);
+        setAuth(false);
+      }
+    };
 
+    async function fetchReviews() {
+      try {
+        // Fetch reviews for the song using songid
+        const reviews = await axios.get(
+          `http://localhost:4000/api/reviews/songs/${songId}`
+        );
+        setReviewList(reviews.data);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    }
+
+    getProfile();
+    fetchReviews();
+  }, [navigate]);
+
+  const accessToken = useAccessToken();
   const tracks = useTracks(accessToken, [songId]);
   console.log(tracks);
 
   const createReviewButton = (
     <Button
-      onClick={() => setDisplayCreateReview(true)}
+      onClick={() => {
+        if (auth)
+          setDisplayCreateReview(true)
+        else
+          navigate("/login");
+      }}
       bg="green"
       color="white"
-      mb="2em"
+      mb="5em"
+      ml="30em"
     >
       + Add a Review
     </Button>
   );
 
-  function returnSong(tracks) {
-    <Song key={songId} song={tracks} />;
-  }
-
   return (
     <VStack p="4">
-      {tracks && (
-        <HStack mt="2em">
-          <Box width="18em" height="20em" bg="white" p="4" borderRadius="1em">
-            {tracks.length > 0 ? (
-              tracks.map((song) => {
-                return <Song key={song.song_id} song={song} />;
-              })
-            ) : (
-              <Text color="white">No songs available.</Text>
-            )}
-          </Box>
-          <Box color="green" p="3" ml="5em">
-            <Text>
-              Song Details:
-              <br />
-              <br />
-              {/* {song.artists.join(", ")} <br />
-              {song.duration_ms} ms <br />
-              {song.genres.join(", ")} <br />
-              {song.release_date} <br /> */}
-            </Text>
-          </Box>
-          {createReviewButton}
-        </HStack>
+      {tracks.length > 0 ? (
+        tracks.map((track) => {
+          console.log(track)
+          return     <HStack>
+            <Flex
+              direction="column"
+              align="center"
+              margin="2em"
+              bg="white"
+              w="18em"
+              h="22em"
+              borderRadius="1em"
+              p="4"
+              boxShadow="md"
+            >
+              <Image
+                src={track.album.images[0].url}
+                alt={track.album.name}
+                borderRadius=".5em"
+                mb="0.5em"
+              />
+        
+              <Text fontWeight="bold" color="black" fontSize="lg">
+                {track.name}
+              </Text>
+      
+              <Text fontSize="sm" color="gray.600">
+                {track.artists.map((artist) => artist.name).join(", ")}
+              </Text>
+            </Flex>
+            <Box color="green" p="3">
+              <Text>
+                Song Details:
+                <br />
+                <br />
+                {track.artists.map((artist) => artist.name).join(", ")} <br />
+                {track.duration_ms} ms <br />
+                {track.album.release_date} <br />
+              </Text>
+            </Box>
+        {createReviewButton}
+      </HStack>
+        })
+      ) : (
+        <Text color="white">No songs available.</Text>
       )}
 
       <VStack>
         {displayCreateReview && <CreateReview user={"user1"} track={songId} />}
-        <Text mt="2em" color="white">
+        <Text mt="2em" mr="61em" color="white">
           Reviews
           <Text
             ml="1em"
