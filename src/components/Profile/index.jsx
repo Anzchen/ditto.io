@@ -68,6 +68,11 @@ function Profile() {
     navigate(`/profile/${clickedUsername}`);
   };
 
+  async function handleUnfollow(username) {
+    await client.unfollowUser(username);
+    console.log("je;p");
+  }
+
   const isCurrentUser = ourprofile.username === username; // Replace 'current_user_username' with actual username
 
   console.log("Profile state:", profile);
@@ -99,7 +104,16 @@ function Profile() {
           {profile.following.map((followingUser) => (
             <ListItem key={followingUser}>
               <Text>{followingUser}</Text>
-              {isCurrentUser ? <Button ml={2}>unfollow</Button> : <></>}
+              {isCurrentUser ? (
+                <Button
+                  ml={2}
+                  onClick={() => handleUnfollow(followingUser.username)}
+                >
+                  unfollow
+                </Button>
+              ) : (
+                <></>
+              )}
             </ListItem>
           ))}
         </List>
