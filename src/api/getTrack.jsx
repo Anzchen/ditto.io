@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 
-const useTracks = (accessToken, trackIds) => {
-  const [tracks, setTracks] = useState([]);
+const useTrack = (accessToken, trackId) => {
+  const [track, setTrack] = useState([]);
 
   useEffect(() => {
-    async function getTracks() {
+    async function getTrack() {
       if (accessToken) {
-        await fetch(`https://api.spotify.com/v1/tracks?ids=${trackIds}`, {
+        await fetch(`https://api.spotify.com/v1/track/${trackId}`, {
           method: "GET",
           headers: {
             Authorization: "Bearer " + accessToken,
@@ -14,17 +14,17 @@ const useTracks = (accessToken, trackIds) => {
         })
           .then((response) => response.json())
           .then((data) => {
-            setTracks(data.tracks);
+            setTrack(data.track);
           })
           .catch((error) => {
             console.error("Error fetching tracks:", error);
           });
       }
     }
-    getTracks();
+    getTrack();
   }, [accessToken]);
 
-  return tracks;
+  return track;
 };
 
-export default useTracks;
+export default useTrack;

@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { API_URL } from "../../consts";
 import { useNavigate, Link as ReachLink, Outlet } from "react-router-dom";
-import { HStack, Button, Input, InputGroup, InputLeftElement, useDisclosure } from '@chakra-ui/react';
-import Results from '../Results'; 
+import {
+  HStack,
+  Button,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 function Header() {
   const navigate = useNavigate();
@@ -25,32 +31,55 @@ function Header() {
 
   const getProfile = () => {
     fetch(`${API_URL}/profile`, {
-      method: 'POST',
-      credentials: 'include'
-    }).then(res => res.json())
-    .then(user => {
-      setUser(user);
-    });
-  }
+      method: "POST",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((user) => {
+        setUser(user);
+      });
+  };
 
   const getAuth = () => {
     fetch(`${API_URL}/auth`, {
-      method: 'POST',
-      credentials: 'include'
-    }).then(res => res.json())
-    .then(auth => {
-      setAuth(auth);
-    });
-  }
+      method: "POST",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((auth) => {
+        setAuth(auth);
+      });
+  };
 
   const logout = () => {
     fetch(`${API_URL}/logout`, {
-      method: 'POST',
-      credentials: 'include'
-    }).then(res => navigate(''))
-    .then(res => {
-      window.location.reload();
-    });
+      method: "POST",
+      credentials: "include",
+    })
+      .then((res) => navigate(""))
+      .then((res) => {
+        window.location.reload();
+      });
+  };
+
+  const login = () => {
+    navigate("/login");
+  };
+
+  const signup = () => {
+    navigate("/register");
+  };
+
+  const profile = () => {
+    navigate("/profile");
+  };
+
+  const goHome = () => {
+    navigate("/");
+  };
+
+  const details = () => {
+    navigate("/details");
   }
 
   useEffect(getAuth, [navigate]);
@@ -61,14 +90,30 @@ function Header() {
       Logout
     </Button>
   ) : (
-    <Button bg="transparent" color="lightgray">
-      <ReachLink to="/login">Login</ReachLink>
+    <Button bg="transparent" color="lightgray" onClick={login}>
+      Login
     </Button>
   );
 
-  const register = (
-    <Button bg="transparent" color="lightgray">
-      <ReachLink to={auth ? "/profile" : "/register"}>{auth ? "Profile" : "Sign Up"}</ReachLink>
+  const home = (
+    <Button bg="transparent" color="lightgray" onClick={goHome}>
+      Home
+    </Button>
+  );
+
+  const register = auth ? (
+    <Button bg="transparent" color="lightgray" onClick={profile}>
+      Profile
+    </Button>
+  ) : (
+    <Button bg="transparent" color="lightgray" onClick={signup}>
+      SignUp
+    </Button>
+  );
+
+  const detailsButton = (
+    <Button onClick={details} bg="lightgray">
+      Details
     </Button>
   );
 
@@ -80,29 +125,29 @@ function Header() {
 
   return (
     <>
-    <HStack m="3" position="fixed" right="0">
-      {searchOpen && (
-        <InputGroup position="fixed" width="50em" left="0" ml="10em">
-          <InputLeftElement
-            pointerEvents="none"
-            children={<FontAwesomeIcon icon={faMagnifyingGlass} color="gray" />}
-          />
-          <Input 
-            placeholder="Search for a song..."
-            bg="white"
-            borderRadius="2em"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            onKeyDown={handleSearchKeyDown}
-          />
-        </InputGroup>
-      )}
-      {searchButton}
-      {button}
-      {register}
-    </HStack>
-    {/* {searchQuery && <Results searchQuery={searchQuery} />} */}
-    <Outlet />
+      <HStack m="3" position="fixed" right="0">
+        {home}
+        {searchOpen && (
+          <InputGroup position="fixed" width="50em" left="0" ml="10em">
+            <InputLeftElement
+              pointerEvents="none"
+              children={
+                <FontAwesomeIcon icon={faMagnifyingGlass} color="gray" />
+              }
+            />
+            <Input
+              placeholder="Search for a song..."
+              bg="white"
+              borderRadius="2em"
+            />
+          </InputGroup>
+        )}
+        {searchButton}
+        {detailsButton}
+        {button}
+        {register}
+      </HStack>
+      <Outlet />
     </>
   );
 }
