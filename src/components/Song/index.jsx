@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, Box, Flex, Image } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useContext } from "react-router-dom";
 
 function Song(props) {
   const navigate = useNavigate();
