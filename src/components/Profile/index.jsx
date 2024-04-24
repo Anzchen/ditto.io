@@ -62,7 +62,7 @@ function Profile() {
         <strong>Followers:</strong>
         <List>
           {profile.followers.map((follower) => (
-            <ListItem key={follower}>
+            <ListItem key={follower} display="flex" alignItems="center">
               <Text
                 onClick={() => handleProfileClick(follower)}
                 cursor="pointer"
@@ -80,6 +80,7 @@ function Profile() {
           {profile.following.map((followingUser) => (
             <ListItem key={followingUser}>
               <Text>{followingUser}</Text>
+              {isCurrentUser ? <Button ml={2}>unfollow</Button> : <></>}
             </ListItem>
           ))}
         </List>
