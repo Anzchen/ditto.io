@@ -56,8 +56,6 @@ function Home() {
           <Text color="white">Log in to see user data </Text>
         </HStack>
       )}
-
-      {/* <SpotifyAPITesting /> */}
     </VStack>
   );
 }
