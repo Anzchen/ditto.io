@@ -12,7 +12,6 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import LogoutEmitter from "../../emit/LogoutEmitter";
 
 function Header() {
   const navigate = useNavigate();
@@ -25,7 +24,6 @@ function Header() {
       if (res.statusText === "OK") {
         setAuth(false);
       }
-      LogoutEmitter.emit("loggedOut");
     } catch (error) {
       console.error(error);
     }
