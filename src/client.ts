@@ -50,7 +50,6 @@ export const signout = async () => {
   return response.data;
 };
 
-<<<<<<< HEAD
 export const followUser = async (username: string) => {
   const response = await axios.post(`${USERS_API}/followuser`, {
     username: username,
@@ -91,12 +90,12 @@ export const getUserByUsername = async (username: string) => {
 
 export const getUserSongs = async (userId: string) => {
   const response = await axios.get(`${USERS_API}/songs/${userId}`);
-=======
+};
 // Reviews
 export const REVIEWS_API = `http://localhost:4000/api/reviews`;
 
 export const createReview = async (review: any) => {
   const response = await axios.post(`${REVIEWS_API}`, review);
->>>>>>> main
+
   return response.data;
 };
