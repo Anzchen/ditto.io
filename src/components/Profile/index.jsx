@@ -9,8 +9,11 @@ import {
   Button,
   IconButton,
   useToast,
+  VStack,
 } from "@chakra-ui/react";
 import * as client from "../../client.ts";
+import axios from "axios";
+import ReviewItem from "../Details/ReviewItem/index.jsx";
 import { useNavigate } from "react-router-dom";
 
 function Profile() {
@@ -19,11 +22,12 @@ function Profile() {
     followers: [],
     following: [],
     role: "USER",
+    reviews: [],
   });
 
   const [ourProfile, setourProfile] = useState({});
-
   const [isFollowing, setIsFollowing] = useState(false);
+  const [reviewList, setReviewList] = useState([]);
 
   const { username } = useParams();
   const navigate = useNavigate();
@@ -63,9 +67,20 @@ function Profile() {
     }
   };
 
+  const fetchReviews = async () => {
+    try {
+      // Fetch reviews for the song using username
+      const reviews = await axios.findReviewByUsername(`http://localhost:4000/api/users/reviews/${username}`);
+      setReviewList(reviews.data);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
+
   useEffect(() => {
     fetchProfile(username);
     fetchourProfile();
+    fetchReviews();
   }, [username]);
 
   const handleProfileClick = (clickedUsername) => {
@@ -204,6 +219,46 @@ function Profile() {
       <Box mb="4">
         <strong>Role:</strong> {profile.role}
       </Box>
+      {/* <Box mb="4">
+        <Heading as="h3" size="md" mb="2">
+          Reviews:
+        </Heading>
+        <List>
+          {profile.reviews.map((review) => (
+            <ListItem key={review.id}>
+              <Text>{review.content}</Text>
+              <Text fontSize="sm" color="gray.500">
+                Date: {review.date}
+              </Text>
+            </ListItem>
+          ))}
+        </List>
+      </Box> */}
+
+      {/* REVIEWS */}
+      <VStack>
+        <Text mt="2em" color="white">
+          Reviews
+          <Text
+            ml="1em"
+            as="span"
+            bg="pink"
+            color="red"
+            h="1"
+            borderRadius="50%"
+            p="1"
+          >
+            {reviewList.length}
+          </Text>
+        </Text>
+        {reviewList.length > 0 ? (
+          reviewList.map((review) => (
+            <ReviewItem key={review.id} review={review} />
+          ))
+        ) : (
+          <Text color="white">No reviews available.</Text>
+        )}
+      </VStack>
       {/* Conditionally render Edit Profile button for the current user */}
       {isCurrentUser && (
         <Button

@@ -99,3 +99,7 @@ export const createReview = async (review: any) => {
 
   return response.data;
 };
+
+export const getUserReviews = async (username: string) => {
+  const response = await axios.get(`${USERS_API}/reviews/${username}`);
+};
