@@ -11,44 +11,22 @@ import {
   InputLeftElement,
   useDisclosure,
 } from "@chakra-ui/react";
+import axios from "axios";
 
 function Header() {
   const navigate = useNavigate();
-  const [user, setUser] = useState({});
   const [auth, setAuth] = useState(false);
   const { isOpen: searchOpen, onToggle: toggleSearch } = useDisclosure();
 
-  const getProfile = () => {
-    fetch(`${API_URL}/profile`, {
-      method: "POST",
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((user) => {
-        setUser(user);
-      });
-  };
-
-  const getAuth = () => {
-    fetch(`${API_URL}/auth`, {
-      method: "POST",
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((auth) => {
-        setAuth(auth);
-      });
-  };
-
-  const logout = () => {
-    fetch(`${API_URL}/logout`, {
-      method: "POST",
-      credentials: "include",
-    })
-      .then((res) => navigate(""))
-      .then((res) => {
-        window.location.reload();
-      });
+  const logout = async () => {
+    try {
+      const res = await axios.post("http://localhost:4000/api/users/signout");
+      if (res.statusText === "OK") {
+        setAuth(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const login = () => {
@@ -69,10 +47,25 @@ function Header() {
 
   const details = () => {
     navigate("/details");
-  }
+  };
 
-  useEffect(getAuth, [navigate]);
-  useEffect(getProfile, [navigate]);
+  useEffect(() => {
+    const getProfile = async () => {
+      try {
+        const res = await axios.post("http://localhost:4000/api/users/profile");
+        const isUser = res.data;
+        if (isUser) {
+          setAuth(true);
+        } else {
+          setAuth(false);
+        }
+      } catch (error) {
+        console.error(error);
+        setAuth(false);
+      }
+    };
+    getProfile();
+  }, [navigate]);
 
   const button = auth ? (
     <Button bg="transparent" color="lightgray" onClick={logout}>

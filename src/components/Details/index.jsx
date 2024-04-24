@@ -17,38 +17,43 @@ export default function Details() {
   const accessToken = useAccessToken();
 
   const trackInfo = useTrack(accessToken, songId);
-  setSong(trackInfo)
+  setSong(trackInfo);
   console.log(trackInfo);
 
   // useEffect(() => {
-    // async function fetchSongDetails() {
-    //   try {
-    //     // Fetch song details using songid from API
-    //     const response = await axios.get(`http://localhost:4000/api/songs/${songId}`);
-    //     setSong(response.data);
-    //   } catch (error) {
-    //     console.error("Error fetching song details:", error);
-    //   }
-    // }
+  // async function fetchSongDetails() {
+  //   try {
+  //     // Fetch song details using songid from API
+  //     const response = await axios.get(`http://localhost:4000/api/songs/${songId}`);
+  //     setSong(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching song details:", error);
+  //   }
+  // }
 
-    // async function fetchReviews() {
-    //   try {
-    //     // Fetch reviews for the song using songid
-    //     const reviews = await axios.get(`http://localhost:4000/api/reviews/songs/${songId}`);
-    //     setReviewList(reviews.data);
-    //   } catch (error) {
-    //     console.error("Error fetching reviews:", error);
-    //   }
-    // }
+  // async function fetchReviews() {
+  //   try {
+  //     // Fetch reviews for the song using songid
+  //     const reviews = await axios.get(`http://localhost:4000/api/reviews/songs/${songId}`);
+  //     setReviewList(reviews.data);
+  //   } catch (error) {
+  //     console.error("Error fetching reviews:", error);
+  //   }
+  // }
 
-    // if (songId) {
-    //   // fetchSongDetails();
-    //   fetchReviews();
-    // }
+  // if (songId) {
+  //   // fetchSongDetails();
+  //   fetchReviews();
+  // }
   // }, []);
 
   const createReviewButton = (
-    <Button onClick={() => setDisplayCreateReview(true)} bg="green" color="white" mb="2em">
+    <Button
+      onClick={() => setDisplayCreateReview(true)}
+      bg="green"
+      color="white"
+      mb="2em"
+    >
       + Add a Review
     </Button>
   );
@@ -81,12 +86,22 @@ export default function Details() {
         {displayCreateReview && <CreateReview user={"user1"} track={songId} />}
         <Text mt="2em" color="white">
           Reviews
-          <Text ml="1em" as="span" bg="pink" color="red" h="1" borderRadius="50%" p="1">
+          <Text
+            ml="1em"
+            as="span"
+            bg="pink"
+            color="red"
+            h="1"
+            borderRadius="50%"
+            p="1"
+          >
             {reviewList.length}
           </Text>
         </Text>
         {reviewList.length > 0 ? (
-          reviewList.map((review) => <ReviewItem key={review.id} review={review} />)
+          reviewList.map((review) => (
+            <ReviewItem key={review.id} review={review} />
+          ))
         ) : (
           <Text color="white">No reviews available.</Text>
         )}
