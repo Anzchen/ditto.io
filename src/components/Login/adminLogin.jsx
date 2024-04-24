@@ -11,7 +11,8 @@ function AdminLogin() {
   const signin = async () => {
     try {
       await client.signup(user);
-      navigate("/profile"); // whatever the admin page is supposed to look like
+      navigate("/profile/${username}");
+      // whatever the admin page is supposed to look like
     } catch (err) {
       setError(err.response.data.message);
     }
