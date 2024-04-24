@@ -7,7 +7,6 @@ import {
   ListItem,
   Text,
   Button,
-  IconButton,
   useToast,
 } from "@chakra-ui/react";
 import * as client from "../../client.ts";
@@ -21,8 +20,7 @@ function Profile() {
     role: "USER",
   });
 
-  const [ourprofile, setourprofile] = useState({});
-
+  const [ourprofile, setOurProfile] = useState({});
   const { username } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
@@ -46,7 +44,7 @@ function Profile() {
   const fetchOurProfile = async () => {
     try {
       const userProfile = await client.profile();
-      setourprofile(userProfile);
+      setOurProfile(userProfile);
     } catch (error) {
       console.error("Error fetching profile:", error);
       toast({
@@ -69,11 +67,35 @@ function Profile() {
     navigate(`/profile/${clickedUsername}`);
   };
 
+  const handleFollow = async (username) => {
+    try {
+      await client.followUser(username);
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        following: [...prevProfile.following, username],
+      }));
+      toast({
+        title: "Success",
+        description: `You are now following ${username}.`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error following user:", error);
+      toast({
+        title: "Error",
+        description: "Failed to follow user.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   const handleUnfollow = async (username) => {
     try {
-      // Call API to unfollow the user
       await client.unfollowUser(username);
-      // Update local state to remove the user from following list
       setProfile((prevProfile) => ({
         ...prevProfile,
         following: prevProfile.following.filter((user) => user !== username),
@@ -97,9 +119,9 @@ function Profile() {
     }
   };
 
-  const isCurrentUser = ourprofile.username === username; // Replace 'current_user_username' with actual username
+  const isCurrentUser = ourprofile.username === username;
 
-  console.log("Profile state:", profile);
+  const isFollowing = profile.following.includes(username);
 
   return (
     <Box p="8" bg="transparent" color="white">
@@ -110,14 +132,15 @@ function Profile() {
         <strong>Followers:</strong>
         <List>
           {profile.followers.map((follower) => (
-            <ListItem key={follower} display="flex" alignItems="center">
-              <Text
-                onClick={() => handleProfileClick(follower)}
-                cursor="pointer"
-                _hover={{ textDecoration: "underline" }}
-              >
-                {follower}
-              </Text>
+            <ListItem
+              key={follower}
+              display="flex"
+              alignItems="center"
+              cursor="pointer"
+              _hover={{ textDecoration: "underline" }}
+              onClick={() => handleProfileClick(follower)}
+            >
+              <Text>{follower}</Text>
             </ListItem>
           ))}
         </List>
@@ -125,29 +148,19 @@ function Profile() {
       <Box mb="4">
         <strong>Following:</strong>
         <List>
-          {profile.following.map((followingUser) => (
-            <ListItem
-              key={followingUser}
-              display="flex"
-              alignItems="center"
-            >
-              <Text
-              onClick={() => handleProfileClick(followingUser)}
-              cursor="pointer"
-              _hover={{ textDecoration: "underline" }}
+          <ListItem display="flex" alignItems="center">
+            <Text>{username}</Text>
+            {!isCurrentUser && (
+              <Button
+                size="sm"
+                onClick={() => (isFollowing ? handleUnfollow(username) : handleFollow(username))}
+                colorScheme={isFollowing ? "red" : "green"}
+                ml="4"
               >
-              {followingUser}
-              </Text>
-              {isCurrentUser && (
-                <Button
-                  size="sm"
-                  colorScheme="red"
-                  onClick={() => handleUnfollow(followingUser)}
-                  ml="4" 
-                > Unfollow </Button>
-              )}
-            </ListItem>
-          ))}
+                {isFollowing ? "Unfollow" : "Follow"}
+              </Button>
+            )}
+          </ListItem>
         </List>
       </Box>
       <Box mb="4">
