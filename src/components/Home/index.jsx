@@ -16,8 +16,8 @@ function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   function logout() {
     setIsLoggedIn(false);
+    LogoutEmitter.removeListener("loggedOut", logout);
   }
-  LogoutEmitter.on("loggedOut", logout);
   useEffect(() => {
     const getProfile = async () => {
       try {
@@ -27,6 +27,7 @@ function Home() {
           setUser(isUser);
           setTopSongs(isUser.songs);
           setIsLoggedIn(true);
+          LogoutEmitter.on("loggedOut", logout);
         } else {
           setIsLoggedIn(false);
         }
