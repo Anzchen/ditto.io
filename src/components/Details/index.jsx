@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { VStack, HStack, Box, Image, Text, Button } from "@chakra-ui/react";
+import { VStack, HStack, Box, Image, Text, Button, Flex } from "@chakra-ui/react";
 import ReviewItem from "./ReviewItem/";
 import CreateReview from "./CreateReview";
 import axios from "axios";
@@ -14,14 +14,6 @@ export default function Details() {
   // const [song, setSong] = useState(null);
   const [reviewList, setReviewList] = useState([]);
   const [displayCreateReview, setDisplayCreateReview] = useState(false);
-
-  const accessToken = useAccessToken();
-
-  const list = [songId];
-
-  console.log(accessToken);
-  const trackInfo = useTracks(accessToken, list);
-  console.log(list);
 
   // useEffect(() => {
   // async function fetchSongDetails() {
@@ -70,6 +62,14 @@ export default function Details() {
     // }
   }, []);
 
+  const accessToken = useAccessToken();
+
+  const list = [songId];
+
+  console.log(accessToken);
+  const trackInfo = useTracks(accessToken, list);
+  console.log(trackInfo.at(0));
+
   const createReviewButton = (
     <Button
       onClick={() => setDisplayCreateReview(true)}
@@ -86,9 +86,7 @@ export default function Details() {
       {trackInfo && (
         <HStack mt="2em">
           <Box width="18em" height="20em" bg="white" p="4" borderRadius="1em">
-            {/* <Song key={songId} song={trackInfo} /> */}
-            {/* <Image height="12em" p="1" src={song.images} alt={song.name} />
-            <Text align="center">{song.name}</Text> */}
+            <Song key={songId} song={trackInfo.at(0)} />
           </Box>
           <Box color="green" p="3" ml="5em">
             <Text>
