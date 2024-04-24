@@ -20,12 +20,15 @@ function Header() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearchChange = (event) => {
+    console.log(event);
     setSearchQuery(event.target.value);
   };
 
   const handleSearchKeyDown = (event) => {
+    console.log(event);
     if (event.key === 'Enter') {
       navigate(`/results?query=${searchQuery}`);
+      setSearchQuery('');
     }
   };
 
@@ -139,6 +142,9 @@ function Header() {
               placeholder="Search for a song..."
               bg="white"
               borderRadius="2em"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              onKeyDown={handleSearchKeyDown}
             />
           </InputGroup>
         )}
