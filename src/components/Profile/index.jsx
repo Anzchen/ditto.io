@@ -7,6 +7,7 @@ import {
   ListItem,
   Text,
   Button,
+  IconButton,
   useToast,
 } from "@chakra-ui/react";
 import * as client from "../../client.ts";
@@ -20,7 +21,10 @@ function Profile() {
     role: "USER",
   });
 
-  const [ourprofile, setOurProfile] = useState({});
+  const [ourProfile, setourProfile] = useState({});
+
+  const [isFollowing, setIsFollowing] = useState(false);
+
   const { username } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
@@ -29,6 +33,8 @@ function Profile() {
     try {
       const userProfile = await client.getUserByUsername(username);
       setProfile(userProfile);
+      const isUserFollowing = ourProfile.following.includes(username);
+        setIsFollowing(isUserFollowing);
     } catch (error) {
       console.error("Error fetching profile:", error);
       toast({
@@ -41,10 +47,10 @@ function Profile() {
     }
   };
 
-  const fetchOurProfile = async () => {
+  const fetchourProfile = async () => {
     try {
       const userProfile = await client.profile();
-      setOurProfile(userProfile);
+      setourProfile(userProfile);
     } catch (error) {
       console.error("Error fetching profile:", error);
       toast({
@@ -59,7 +65,7 @@ function Profile() {
 
   useEffect(() => {
     fetchProfile(username);
-    fetchOurProfile();
+    fetchourProfile();
   }, [username]);
 
   const handleProfileClick = (clickedUsername) => {
@@ -67,35 +73,11 @@ function Profile() {
     navigate(`/profile/${clickedUsername}`);
   };
 
-  const handleFollow = async (username) => {
-    try {
-      await client.followUser(username);
-      setProfile((prevProfile) => ({
-        ...prevProfile,
-        following: [...prevProfile.following, username],
-      }));
-      toast({
-        title: "Success",
-        description: `You are now following ${username}.`,
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    } catch (error) {
-      console.error("Error following user:", error);
-      toast({
-        title: "Error",
-        description: "Failed to follow user.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
-
   const handleUnfollow = async (username) => {
     try {
+      // Call API to unfollow the user
       await client.unfollowUser(username);
+      // Update local state to remove the user from following list
       setProfile((prevProfile) => ({
         ...prevProfile,
         following: prevProfile.following.filter((user) => user !== username),
@@ -119,28 +101,74 @@ function Profile() {
     }
   };
 
-  const isCurrentUser = ourprofile.username === username;
+  const handleToggleFollow = async () => {
+    try {
+      if (isFollowing) {
+        // Unfollow the user
+        await client.unfollowUser(username);
+        setIsFollowing(false);
+        toast({
+          title: "Success",
+          description: `You have unfollowed ${username}.`,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        // Follow the user
+        await client.followUser(username);
+        setIsFollowing(true);
+        toast({
+          title: "Success",
+          description: `You are now following ${username}.`,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Error toggling follow status:", error);
+      toast({
+        title: "Error",
+        description: "Failed to toggle follow status.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
-  const isFollowing = profile.following.includes(username);
+  const isCurrentUser = ourProfile.username === username; // Replace 'current_user_username' with actual username
+
+  console.log("Profile state:", profile);
 
   return (
     <Box p="8" bg="transparent" color="white">
       <Heading as="h2" size="lg" mb="6">
         @{username}'s Profile
+        {!isCurrentUser && (
+          <Button
+            size="lg"
+            colorScheme={isFollowing ? "red" : "green"}
+            onClick={handleToggleFollow}
+            ml="4"
+          >
+            {isFollowing ? "Unfollow" : "Follow"}
+          </Button>
+        )}
       </Heading>
       <Box mb="4">
         <strong>Followers:</strong>
         <List>
           {profile.followers.map((follower) => (
-            <ListItem
-              key={follower}
-              display="flex"
-              alignItems="center"
-              cursor="pointer"
-              _hover={{ textDecoration: "underline" }}
-              onClick={() => handleProfileClick(follower)}
-            >
-              <Text>{follower}</Text>
+            <ListItem key={follower} display="flex" alignItems="center">
+              <Text
+                onClick={() => handleProfileClick(follower)}
+                cursor="pointer"
+                _hover={{ textDecoration: "underline" }}
+              >
+                {follower}
+              </Text>
             </ListItem>
           ))}
         </List>
@@ -148,19 +176,29 @@ function Profile() {
       <Box mb="4">
         <strong>Following:</strong>
         <List>
-          <ListItem display="flex" alignItems="center">
-            <Text>{username}</Text>
-            {!isCurrentUser && (
-              <Button
-                size="sm"
-                onClick={() => (isFollowing ? handleUnfollow(username) : handleFollow(username))}
-                colorScheme={isFollowing ? "red" : "green"}
-                ml="4"
+          {profile.following.map((followingUser) => (
+            <ListItem
+              key={followingUser}
+              display="flex"
+              alignItems="center"
+            >
+              <Text
+              onClick={() => handleProfileClick(followingUser)}
+              cursor="pointer"
+              _hover={{ textDecoration: "underline" }}
               >
-                {isFollowing ? "Unfollow" : "Follow"}
-              </Button>
-            )}
-          </ListItem>
+              {followingUser}
+              </Text>
+              {isCurrentUser && (
+                <Button
+                  size="sm"
+                  colorScheme="red"
+                  onClick={() => handleUnfollow(followingUser)}
+                  ml="4" 
+                > Unfollow </Button>
+              )}
+            </ListItem>
+          ))}
         </List>
       </Box>
       <Box mb="4">
