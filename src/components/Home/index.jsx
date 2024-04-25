@@ -53,7 +53,7 @@ function Home() {
         <HStack>
           {tracks.length > 0 ? (
             tracks.map((song) => {
-              return <Song key={song.song_id} song={song}/>;
+              return <Song key={song.song_id} song={song} />;
             })
           ) : (
             <Text color="white">No songs available.</Text>
