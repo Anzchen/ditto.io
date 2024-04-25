@@ -1,9 +1,8 @@
-import React, { useEffect, useState, createContext, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { VStack, HStack, Text } from "@chakra-ui/react";
 import Discover from "./Discover/";
 import Message from "./Message/";
 import Song from "../Song/";
-import SpotifyAPITesting, { API_URL } from "../../consts";
 import useTracks from "../../api/getTracks";
 import useAccessToken from "../../api/getAccessToken";
 import { useInstantTransition } from "framer-motion";
