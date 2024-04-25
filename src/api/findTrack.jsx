@@ -6,7 +6,7 @@ const SearchTrack = (accessToken, text) => {
   useEffect(() => {
     async function findTrack() {
       if (accessToken) {
-        await fetch(`https://api.spotify.com/v1/search/q=${text}&type=track`, {
+        await fetch(`https://api.spotify.com/v1/search?q=${text}&type=track`, {
           method: "GET",
           headers: {
             Authorization: "Bearer " + accessToken,
@@ -14,7 +14,7 @@ const SearchTrack = (accessToken, text) => {
         })
           .then((response) => response.json())
           .then((data) => {
-            setTracks(data.track);
+            setTracks(data.tracks);
           })
           .catch((error) => {
             console.error("Error fetching track:", error);

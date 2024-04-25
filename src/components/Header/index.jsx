@@ -134,12 +134,7 @@ function Header() {
         justifyContent={"right"}
       >
         {searchOpen && (
-          <InputGroup position="fixed" width="50em" left="0" ml="10em" 
-          onKeyPress={event => {
-            if (event.key === 'Enter') {
-              navigate("/results");
-            }
-          }}>
+          <InputGroup position="fixed" width="50em" left="0" ml="10em">
             <InputLeftElement
               pointerEvents="none"
               children={
