@@ -106,3 +106,7 @@ export const getUserReviews = async (username: string) => {
   return response.data;
 };
 
+export const deleteReview = async (reviewId: string) => {
+  const response = await axios.delete(`${REVIEWS_API}/${reviewId}`);
+  return response.data;
+};

@@ -14,6 +14,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import useAccessToken from "../../api/getAccessToken";
 import useTracks from "../../api/getTracks";
+import LogoutEmitter from "../../emit/LogoutEmitter";
 
 export default function Details() {
   const { songId } = useParams(); // Extract songid from URL params
@@ -30,6 +31,14 @@ export default function Details() {
         const isUser = res.data;
         if (isUser) {
           setAuth(true);
+          LogoutEmitter.on("deletedReview", () => window.location.reload());
+          LogoutEmitter.removeListener("deletedReview", () =>
+            window.location.reload()
+          );
+          LogoutEmitter.on("createdReview", () => window.location.reload());
+          LogoutEmitter.removeListener("deletedReview", () =>
+            window.location.reload()
+          );
         } else {
           setAuth(false);
         }
@@ -55,6 +64,18 @@ export default function Details() {
     fetchReviews();
   }, [navigate]);
 
+  async function fetchReviews() {
+    try {
+      // Fetch reviews for the song using songid
+      const reviews = await axios.get(
+        `http://localhost:4000/api/reviews/songs/${songId}`
+      );
+      setReviewList(reviews.data);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  }
+
   const accessToken = useAccessToken();
   const tracks = useTracks(accessToken, [songId]);
   console.log(tracks);
@@ -62,10 +83,8 @@ export default function Details() {
   const createReviewButton = (
     <Button
       onClick={() => {
-        if (auth)
-          setDisplayCreateReview(true)
-        else
-          navigate("/login");
+        if (auth) setDisplayCreateReview(true);
+        else navigate("/login");
       }}
       bg="green"
       color="white"
@@ -81,46 +100,48 @@ export default function Details() {
     <VStack p="4" align="stretch">
       {tracks.length > 0 ? (
         tracks.map((track) => {
-          console.log(track)
-          return     <HStack key={track.id} spacing="4" flexWrap="wrap" justify="center">
-            <Flex
-              direction="column"
-              align="center"
-              margin="2em"
-              bg="white"
-              w="18em"
-              h="22em"
-              borderRadius="1em"
-              p="4"
-              boxShadow="md"
-            >
-              <Image
-                src={track.album.images[0].url}
-                alt={track.album.name}
-                borderRadius=".5em"
-                mb="0.5em"
-              />
-        
-              <Text fontWeight="bold" color="black" fontSize="lg">
-                {track.name}
-              </Text>
-      
-              <Text fontSize="sm" color="gray.600">
-                {track.artists.map((artist) => artist.name).join(", ")}
-              </Text>
-            </Flex>
-            <Box color="green" p="3">
-              <Text>
-                Song Details:
-                <br />
-                <br />
-                {track.artists.map((artist) => artist.name).join(", ")} <br />
-                {track.duration_ms} ms <br />
-                {track.album.release_date} <br />
-              </Text>
-            </Box>
-        {createReviewButton}
-      </HStack>
+          console.log(track);
+          return (
+            <HStack key={track.id} spacing="4" flexWrap="wrap" justify="center">
+              <Flex
+                direction="column"
+                align="center"
+                margin="2em"
+                bg="white"
+                w="18em"
+                h="22em"
+                borderRadius="1em"
+                p="4"
+                boxShadow="md"
+              >
+                <Image
+                  src={track.album.images[0].url}
+                  alt={track.album.name}
+                  borderRadius=".5em"
+                  mb="0.5em"
+                />
+
+                <Text fontWeight="bold" color="black" fontSize="lg">
+                  {track.name}
+                </Text>
+
+                <Text fontSize="sm" color="gray.600">
+                  {track.artists.map((artist) => artist.name).join(", ")}
+                </Text>
+              </Flex>
+              <Box color="green" p="3">
+                <Text>
+                  Song Details:
+                  <br />
+                  <br />
+                  {track.artists.map((artist) => artist.name).join(", ")} <br />
+                  {track.duration_ms} ms <br />
+                  {track.album.release_date} <br />
+                </Text>
+              </Box>
+              {createReviewButton}
+            </HStack>
+          );
         })
       ) : (
         <Text color="white">No songs available.</Text>
