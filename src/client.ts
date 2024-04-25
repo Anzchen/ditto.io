@@ -101,7 +101,7 @@ export const createReview = async (review: any) => {
 };
 
 export const addToFavorite = async (songId: any) => {
-  const response = await axios.post(`${USERS_API}/addfav`, songId);
+  const response = await axios.post(`${USERS_API}/addfav`, {songId: songId});
 
   return response.data;
 };
