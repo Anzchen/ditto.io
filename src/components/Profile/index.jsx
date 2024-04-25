@@ -34,7 +34,7 @@ function Profile() {
       const userProfile = await client.getUserByUsername(username);
       setProfile(userProfile);
       const isUserFollowing = ourProfile.following.includes(username);
-        setIsFollowing(isUserFollowing);
+      setIsFollowing(isUserFollowing);
     } catch (error) {
       console.error("Error fetching profile:", error);
       toast({
@@ -177,25 +177,24 @@ function Profile() {
         <strong>Following:</strong>
         <List>
           {profile.following.map((followingUser) => (
-            <ListItem
-              key={followingUser}
-              display="flex"
-              alignItems="center"
-            >
+            <ListItem key={followingUser} display="flex" alignItems="center">
               <Text
-              onClick={() => handleProfileClick(followingUser)}
-              cursor="pointer"
-              _hover={{ textDecoration: "underline" }}
+                onClick={() => handleProfileClick(followingUser)}
+                cursor="pointer"
+                _hover={{ textDecoration: "underline" }}
               >
-              {followingUser}
+                {followingUser}
               </Text>
               {isCurrentUser && (
                 <Button
                   size="sm"
                   colorScheme="red"
                   onClick={() => handleUnfollow(followingUser)}
-                  ml="4" 
-                > Unfollow </Button>
+                  ml="4"
+                >
+                  {" "}
+                  Unfollow{" "}
+                </Button>
               )}
             </ListItem>
           ))}

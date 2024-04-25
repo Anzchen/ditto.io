@@ -14,7 +14,6 @@ import EditProfile from "./components/Profile/editProfile";
 
 import useAccessToken from "./api/getAccessToken";
 
-
 function App() {
   const theme = extendTheme({
     fonts: {
@@ -27,10 +26,9 @@ function App() {
     <ChakraProvider theme={theme}>
       <Box minH="100vh" position="relative" bg="#1A1A2E">
         <Box
-          height="89vh"
-          position="absolute"
+          height="100%"
+          position="relative"
           width="100%"
-          bottom="0"
           borderTopRadius="1em"
           bg="#2b2b3f"
         >
