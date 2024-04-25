@@ -18,10 +18,9 @@ function EditProfile() {
   const [profile, setProfile] = useState({
     username: "",
     password: "",
-    phone_number: "",
   });
 
-  const [editableFields] = useState(["username", "password", "phone_number"]);
+  const [editableFields] = useState(["username", "password"]);
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
@@ -101,9 +100,7 @@ function EditProfile() {
             <FormLabel>
               {field === "username"
                 ? "Username"
-                : field === "password"
-                ? "Password"
-                : "Phone Number"}
+                : field === "password" && "Password"}
             </FormLabel>
             {field === "password" ? (
               <InputGroup>
