@@ -11,18 +11,17 @@ function Results({ searchQuery }) {
 
   useEffect(() => {
     setQuery(new URLSearchParams(location.search).get("query"));
-    if (query === "")
-      setQuery("hehe") // default
-    else
-      setSongTitle(query); // Set song title from URL query parameter
+    if (query === "") setQuery("hehe"); // default
+    else setSongTitle(query); // Set song title from URL query parameter
   }, [location.search]);
 
   const accessToken = useAccessToken();
   const results = SearchTrack(accessToken, query);
-  console.log(results)
+  console.log(results);
 
   return (
-    <VStack ml={40} spacing={4} mt="4em" align="stretch" maxW="80%">
+    <VStack ml={40} spacing={4} align="stretch" maxW="80%">
+      <br />
       {songTitle && (
         <Text as="h2" size="md" mt={20} ml={40} color="white">
           Showing Search Results for "{songTitle}"
@@ -30,43 +29,45 @@ function Results({ searchQuery }) {
       )}
       {results.items ? (
         results.items.map((song) => (
-        <Box
-          key={song.id}
-          p={4}
-          borderWidth="1px"
-          borderRadius="md"
-          bg="gray.100"
-        >
-          <Flex align="center">
-            <Image
-              src={song.album.images[0].url}
-              alt={song.album}
-              boxSize="100px"
-              objectFit="cover"
-              mr={4}
-            />
+          <Box
+            key={song.id}
+            p={4}
+            borderWidth="1px"
+            borderRadius="md"
+            bg="gray.100"
+          >
+            <Flex align="center">
+              <Image
+                src={song.album.images[0].url}
+                alt={song.album}
+                boxSize="100px"
+                objectFit="cover"
+                mr={4}
+              />
 
-            <VStack spacing={2} align="flex-start">
-              <Text fontSize="md" color="black">
-                {song.name}
-              </Text>
-              <Text fontSize="sm" color="gray.500">
-                {song.artists.map((artist) => artist.name).join(", ")}
-              </Text>
-            </VStack>
-          </Flex>
+              <VStack spacing={2} align="flex-start">
+                <Text fontSize="md" color="black">
+                  {song.name}
+                </Text>
+                <Text fontSize="sm" color="gray.500">
+                  {song.artists.map((artist) => artist.name).join(", ")}
+                </Text>
+              </VStack>
+            </Flex>
 
-          <Button colorScheme="purple" size="sm" mt={2} ml="auto">
-            <Link
-              to={`/details/${song.id}`}
-              style={{ textDecoration: "none", color: "white" }}
-            >
-              View Details
-            </Link>
-          </Button>
-        </Box>
-      ))
-    ) : (<></>)}
+            <Button colorScheme="purple" size="sm" mt={2} ml="auto">
+              <Link
+                to={`/details/${song.id}`}
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                View Details
+              </Link>
+            </Button>
+          </Box>
+        ))
+      ) : (
+        <></>
+      )}
     </VStack>
   );
 }
