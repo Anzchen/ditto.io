@@ -46,7 +46,7 @@ function Home() {
 
   return (
     <VStack spacing="20" align="stretch" p="20">
-      <HStack>
+      <HStack ml="10">
         <Discover />
         {user && <Message user={user} isLoggedIn={isLoggedIn} />}
       </HStack>
@@ -56,15 +56,12 @@ function Home() {
         alignContent="center"
         align="stretch"
       >
-        {isLoggedIn ? (
+        {isLoggedIn &&
           tracks && tracks.length > 0 ? (
             tracks.map((song) => <Song key={song.song_id} song={song} />)
           ) : (
-            <Text color="white">No songs available.</Text>
-          )
-        ) : (
-          <Text color="white">Log in to see user data</Text>
-        )}
+            <Text ml="20" color="white">No songs available yet.</Text>
+          )}
       </HStack>
     </VStack>
   );

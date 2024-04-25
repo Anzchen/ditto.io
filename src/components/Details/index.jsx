@@ -98,7 +98,7 @@ export default function Details() {
   );
 
   return (
-    <VStack p="4" align="stretch">
+    <VStack p="20" align="stretch">
       {tracks.length > 0 ? (
         tracks.map((track) => {
           console.log(track);
@@ -130,16 +130,18 @@ export default function Details() {
                   {track.artists.map((artist) => artist.name).join(", ")}
                 </Text>
               </Flex>
-              <Box color="green" p="3">
-                <Text>
-                  Song Details:
-                  <br />
-                  <br />
-                  {track.artists.map((artist) => artist.name).join(", ")} <br />
-                  {track.duration_ms} ms <br />
-                  {track.album.release_date} <br />
-                </Text>
-              </Box>
+              <Box color="white" p="3" maxWidth="300px">
+  <Text fontSize="sm">
+    <strong>Song Details:</strong>
+    <br />
+    <br />
+    <strong>Artist(s):</strong> {track.artists.map((artist) => artist.name).join(", ")}
+    <br />
+    <strong>Duration:</strong> {(track.duration_ms)} 
+    <br />
+    <strong>Release Date:</strong> {(track.album.release_date)} 
+  </Text>
+</Box>
               {createReviewButton}
             </HStack>
           );

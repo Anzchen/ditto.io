@@ -59,8 +59,8 @@ function Results() {
   const results = SearchTrack(accessToken, query).items;
 
   return (
-    <VStack ml={40} spacing={4} mt="4em" align="stretch" maxW="80%">
-      <Text as="h2" size="md" mt={20} ml={40} color="white">
+    <VStack ml={40} spacing={4} align="stretch" maxW="80%">
+      <Text as="h2" size="md" mt={20} color="white">
         Showing Search Results for "{query}"
       </Text>
       {results ? (
@@ -102,7 +102,7 @@ function Results() {
 
             {user.songs && !user.songs.includes(song.id) ? (
               <Button
-                colorScheme="purple"
+                colorScheme="pink"
                 color="white"
                 size="sm"
                 mt={2}

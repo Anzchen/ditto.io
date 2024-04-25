@@ -17,13 +17,13 @@ function Message(props) {
           </Text>
           <Text>
             <br />
-            Here are your Top 3 Songs! Click on any of the songs below to write
+            Here are your Top Songs! Click on any of the songs below to write
             a Review.
           </Text>
         </Box>
       ) : (
         <Box ml="2em" as="b" color="white" w="14em">
-          <Text color="white">Log in to see your top 3 Songs on Spotify!</Text>
+          <Text color="white">Log in to see your top Songs on Spotify!</Text>
         </Box>
       )}
     </>

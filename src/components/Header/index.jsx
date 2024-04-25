@@ -132,9 +132,10 @@ function Header() {
         bg={"#1a1a2e"}
         width={"100%"}
         justifyContent={"right"}
+        mt="2"
       >
         {searchOpen && (
-          <InputGroup position="fixed" width="50em" left="0" ml="10em">
+          <InputGroup position="fixed" width="calc(100vw - 30em)" left="0" ml="10em" flexWrap="flex">
             <InputLeftElement
               pointerEvents="none"
               children={
