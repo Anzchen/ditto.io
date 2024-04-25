@@ -21,7 +21,7 @@ export default function Details() {
   const [reviewList, setReviewList] = useState([]);
   const [displayCreateReview, setDisplayCreateReview] = useState(false);
   const [auth, setAuth] = useState(false);
-
+  const [user, setCurrentUser] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,6 +31,7 @@ export default function Details() {
         const isUser = res.data;
         if (isUser) {
           setAuth(true);
+          setCurrentUser(isUser);
           LogoutEmitter.on("deletedReview", () => window.location.reload());
           LogoutEmitter.removeListener("deletedReview", () =>
             window.location.reload()
@@ -148,7 +149,7 @@ export default function Details() {
       )}
 
       <VStack flexWrap="wrap">
-        {displayCreateReview && <CreateReview user={"user1"} track={songId} />}
+        {displayCreateReview && <CreateReview user={user} track={songId} />}
         <Text mt="2em" mr="61em" color="white">
           Reviews
           <Text
