@@ -12,10 +12,11 @@ export default function CreateReview(props) {
   const [review, setReview] = useState({
     song_id: props.track,
     star_rating: "",
-    reviewer: props.user,
+    reviewer: props.user.username,
     text: "",
     review_id: nanoid(),
   });
+  console.log(props.user);
 
   const createReview = async () => {
     try {
