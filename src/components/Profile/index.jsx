@@ -167,10 +167,20 @@ function Profile() {
   console.log("Profile state:", profile);
 
   return (
-    <Box p="8" bg="transparent" color="white">
-      <br></br>
+    <Box p="20" bg="transparent" color="white">
       <Heading as="h2" size="lg" mb="6">
         @{username}'s Profile
+        {/* Conditionally render Edit Profile button for the current user */}
+      {isCurrentUser && (
+        <Button
+          colorScheme="purple"
+          size="md"
+          onClick={() => navigate("/edit-profile")}
+          ml="4"
+        >
+          Edit Profile
+        </Button>
+      )}
         {!isCurrentUser && (
           <Button
             size="lg"
@@ -228,38 +238,9 @@ function Profile() {
       <Box mb="4">
         <strong>Role:</strong> {profile.role}
       </Box>
-      {/* <Box mb="4">
-        <Heading as="h3" size="md" mb="2">
-          Reviews:
-        </Heading>
-        <List>
-          {profile.reviews.map((review) => (
-            <ListItem key={review.id}>
-              <Text>{review.content}</Text>
-              <Text fontSize="sm" color="gray.500">
-                Date: {review.date}
-              </Text>
-            </ListItem>
-          ))}
-        </List>
-      </Box> */}
-
-      {/* REVIEWS */}
-      <VStack>
-        <Text mt="2em" color="white">
-          Reviews
-          <Text
-            ml="1em"
-            as="span"
-            bg="pink"
-            color="red"
-            h="1"
-            borderRadius="50%"
-            p="1"
-          >
-            {reviewList.length}
-          </Text>
-        </Text>
+      <Box mb="4">
+        <strong>Reviews: {reviewList.length} </strong>
+      <VStack align="flex-start" spacing="4" w="100%" ml="-8" mt="4">
         {reviewList.length > 0 ? (
           reviewList.map((review) => (
             <ReviewItem key={review.id} review={review} />
@@ -268,17 +249,7 @@ function Profile() {
           <Text color="white">No reviews available.</Text>
         )}
       </VStack>
-      {/* Conditionally render Edit Profile button for the current user */}
-      {isCurrentUser && (
-        <Button
-          colorScheme="purple"
-          size="md"
-          onClick={() => navigate("/edit-profile")}
-          mr="4"
-        >
-          Edit Profile
-        </Button>
-      )}
+      </Box>
     </Box>
   );
 }
