@@ -101,5 +101,8 @@ export const createReview = async (review: any) => {
 };
 
 export const getUserReviews = async (username: string) => {
-  const response = await axios.get(`${USERS_API}/reviews/${username}`);
+  const response = await axios.get(`${REVIEWS_API}/reviewer/${username}`);
+  console.log("Response:" + JSON.stringify(response));
+  return response.data;
 };
+

@@ -74,8 +74,9 @@ function Profile() {
   const fetchReviews = async () => {
     try {
       // Fetch reviews for the song using username
-      const reviews = await axios.findReviewByUsername(`http://localhost:4000/api/users/reviews/${username}`);
-      setReviewList(reviews.data);
+      const reviews = await client.getUserReviews(username);
+      console.log("Reviews:" + JSON.stringify(reviews));
+      setReviewList(reviews);
     } catch (error) {
       console.error("Error fetching reviews:", error);
     }
