@@ -3,8 +3,15 @@ import { Link, useLocation } from "react-router-dom";
 import { Box, Text, Button, VStack, Image, Flex } from "@chakra-ui/react";
 import useAccessToken from "../../api/getAccessToken";
 import SearchTrack from "../../api/findTrack";
+import axios from "axios";
+import LogoutEmitter from "../../emit/LogoutEmitter";
+import * as client from "../../client.ts";
 
-function Results({ searchQuery }) {
+function Results() {
+  const [user, setUser] = useState({});
+  const [topSongs, setTopSongs] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const location = useLocation();
 
@@ -14,7 +21,39 @@ function Results({ searchQuery }) {
     setQuery(new URLSearchParams(location.search).get("query"));
     if (new URLSearchParams(location.search).get("query") === "")
       setQuery("hehe")
-  }, [location.search]);
+
+    const getProfile = async () => {
+      try {
+        const res = await axios.post("http://localhost:4000/api/users/profile");
+        const isUser = res.data;
+        if (isUser) {
+          setUser(isUser);
+          setTopSongs(isUser.songs);
+          setIsLoggedIn(true);
+          LogoutEmitter.on("loggedOut", logout);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        setIsLoggedIn(false);
+        console.error("Error fetching user profile:", error);
+      }
+    };
+    getProfile();
+  }, [location.search, setUser]);
+
+  function logout() {
+    setIsLoggedIn(false);
+    LogoutEmitter.removeListener("loggedOut", logout);
+  }
+
+  const addToFavorite = async (songId) => {
+    try {
+        await client.addToFavorite(songId);
+    } catch (err) {
+        setError(err.response.data.message);
+    }
+    };
 
   const accessToken = useAccessToken();
   const results = SearchTrack(accessToken, query).items;
@@ -60,6 +99,12 @@ function Results({ searchQuery }) {
                 View Details
               </Link>
             </Button>
+
+            {user.songs && !(user.songs.includes(song.id))? (
+            <Button colorScheme="purple" color="white" size="sm" mt={2} ml="1em" onClick={() => addToFavorite(song.id)}>
+                Add as favorite
+            </Button>
+            ): (<></>)}
           </Box>
         ))
       ) : (

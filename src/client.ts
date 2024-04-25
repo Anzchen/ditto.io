@@ -100,6 +100,12 @@ export const createReview = async (review: any) => {
   return response.data;
 };
 
+export const addToFavorite = async (songId: any) => {
+  const response = await axios.post(`${USERS_API}/addfav`, songId);
+
+  return response.data;
+};
+
 export const getUserReviews = async (username: string) => {
   const response = await axios.get(`${REVIEWS_API}/reviewer/${username}`);
   console.log("Response:" + JSON.stringify(response));
