@@ -112,7 +112,13 @@ function Header() {
 
   return (
     <>
-      <HStack m="3" position="fixed" right="0">
+      <HStack
+        position="fixed"
+        right="0"
+        bg={"#1a1a2e"}
+        width={"100%"}
+        justifyContent={"right"}
+      >
         {searchOpen && (
           <InputGroup position="fixed" width="50em" left="0" ml="10em">
             <InputLeftElement
