@@ -42,27 +42,29 @@ function Results({ searchQuery }) {
               mr={4}
             />
 
-            <VStack spacing={2} align="flex-start">
-              <Text fontSize="md" color="black">
-                {song.name}
-              </Text>
-              <Text fontSize="sm" color="gray.500">
-                {song.artists.map((artist) => artist.name).join(", ")}
-              </Text>
-            </VStack>
-          </Flex>
+              <VStack spacing={2} align="flex-start">
+                <Text fontSize="md" color="black">
+                  {song.name}
+                </Text>
+                <Text fontSize="sm" color="gray.500">
+                  {song.artists.map((artist) => artist.name).join(", ")}
+                </Text>
+              </VStack>
+            </Flex>
 
-          <Button colorScheme="purple" size="sm" mt={2} ml="auto">
-            <Link
-              to={`/details/${song.id}`}
-              style={{ textDecoration: "none", color: "white" }}
-            >
-              View Details
-            </Link>
-          </Button>
-        </Box>
-      ))
-    ) : (<></>)}
+            <Button colorScheme="purple" size="sm" mt={2} ml="auto">
+              <Link
+                to={`/details/${song.id}`}
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                View Details
+              </Link>
+            </Button>
+          </Box>
+        ))
+      ) : (
+        <></>
+      )}
     </VStack>
   );
 }

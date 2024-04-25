@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import * as client from "../../client.ts";
 import ReviewItem from "../Details/ReviewItem/index.jsx";
+import LogoutEmitter from "../../emit/LogoutEmitter";
 
 function Profile() {
   const [profile, setProfile] = useState({
@@ -25,6 +26,11 @@ function Profile() {
   const [ourProfile, setourProfile] = useState({});
   const [isFollowing, setIsFollowing] = useState(false);
   const [reviewList, setReviewList] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  function logout() {
+    navigate("/");
+    LogoutEmitter.removeListener("loggedOut", logout);
+  }
 
   const { username } = useParams();
   const navigate = useNavigate();
@@ -56,6 +62,7 @@ function Profile() {
     try {
       const userProfile = await client.profile();
       setourProfile(userProfile);
+      LogoutEmitter.on("loggedOut", logout);
     } catch (error) {
       console.error("Error fetching profile:", error);
       toast({
@@ -161,6 +168,7 @@ function Profile() {
 
   return (
     <Box p="8" bg="transparent" color="white">
+      <br></br>
       <Heading as="h2" size="lg" mb="6">
         @{username}'s Profile
         {!isCurrentUser && (
