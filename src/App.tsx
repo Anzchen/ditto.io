@@ -40,7 +40,8 @@ function App() {
                 <Route path="profile/:username" element={<Profile />} />
                 <Route path="edit-profile" element={<EditProfile />} />
 
-                <Route path="results" element={<Results />} />
+                {/* <Route path="results" element={<Results />} /> */}
+                <Route path="results?query=" element={<Results />}></Route>
               </Route>
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
