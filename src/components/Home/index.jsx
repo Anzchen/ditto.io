@@ -22,7 +22,7 @@ function Home() {
       try {
         const res = await axios.post("http://localhost:4000/api/users/profile");
         const isUser = res.data;
-        console.log(isUser);
+        console.log("getprofile called");
         if (isUser) {
           setUser(isUser);
           setTopSongs(isUser.songs);
@@ -37,6 +37,7 @@ function Home() {
       }
     };
     getProfile();
+    LogoutEmitter.on("addedFavorite", getProfile);
   }, [setUser]);
   const accessToken = useAccessToken();
 

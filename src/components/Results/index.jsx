@@ -16,11 +16,10 @@ function Results() {
   const location = useLocation();
 
   useEffect(() => {
-    if (query)
-      window.location.reload();
+    if (query) window.location.reload();
     setQuery(new URLSearchParams(location.search).get("query"));
     if (new URLSearchParams(location.search).get("query") === "")
-      setQuery("hehe")
+      setQuery("hehe");
 
     const getProfile = async () => {
       try {
@@ -49,37 +48,38 @@ function Results() {
 
   const addToFavorite = async (songId) => {
     try {
-        await client.addToFavorite(songId);
+      await client.addToFavorite(songId);
+      LogoutEmitter.emit("addedFavorite");
     } catch (err) {
-        setError(err.response.data.message);
+      setError(err.response.data.message);
     }
-    };
+  };
 
   const accessToken = useAccessToken();
   const results = SearchTrack(accessToken, query).items;
 
   return (
     <VStack ml={40} spacing={4} mt="4em" align="stretch" maxW="80%">
-        <Text as="h2" size="md" mt={20} ml={40} color="white">
-          Showing Search Results for "{query}"
-        </Text>
+      <Text as="h2" size="md" mt={20} ml={40} color="white">
+        Showing Search Results for "{query}"
+      </Text>
       {results ? (
         results.map((song) => (
-        <Box
-          key={song.id}
-          p={4}
-          borderWidth="1px"
-          borderRadius="md"
-          bg="gray.100"
-        >
-          <Flex align="center">
-            <Image
-              src={song.album.images[0].url}
-              alt={song.album}
-              boxSize="100px"
-              objectFit="cover"
-              mr={4}
-            />
+          <Box
+            key={song.id}
+            p={4}
+            borderWidth="1px"
+            borderRadius="md"
+            bg="gray.100"
+          >
+            <Flex align="center">
+              <Image
+                src={song.album.images[0].url}
+                alt={song.album}
+                boxSize="100px"
+                objectFit="cover"
+                mr={4}
+              />
 
               <VStack spacing={2} align="flex-start">
                 <Text fontSize="md" color="black">
@@ -100,11 +100,20 @@ function Results() {
               </Link>
             </Button>
 
-            {user.songs && !(user.songs.includes(song.id))? (
-            <Button colorScheme="purple" color="white" size="sm" mt={2} ml="1em" onClick={() => addToFavorite(song.id)}>
+            {user.songs && !user.songs.includes(song.id) ? (
+              <Button
+                colorScheme="purple"
+                color="white"
+                size="sm"
+                mt={2}
+                ml="1em"
+                onClick={() => addToFavorite(song.id)}
+              >
                 Add as favorite
-            </Button>
-            ): (<></>)}
+              </Button>
+            ) : (
+              <></>
+            )}
           </Box>
         ))
       ) : (
