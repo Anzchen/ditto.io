@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Heading,
@@ -7,14 +7,11 @@ import {
   ListItem,
   Text,
   Button,
-  IconButton,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 import * as client from "../../client.ts";
-import axios from "axios";
 import ReviewItem from "../Details/ReviewItem/index.jsx";
-import { useNavigate } from "react-router-dom";
 import LogoutEmitter from "../../emit/LogoutEmitter";
 
 function Profile() {

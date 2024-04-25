@@ -5,45 +5,42 @@ import useAccessToken from "../../api/getAccessToken";
 import SearchTrack from "../../api/findTrack";
 
 function Results({ searchQuery }) {
-  const [songTitle, setSongTitle] = useState("");
   const [query, setQuery] = useState("");
   const location = useLocation();
 
   useEffect(() => {
+    if (query)
+      window.location.reload();
     setQuery(new URLSearchParams(location.search).get("query"));
-    if (query === "") setQuery("hehe"); // default
-    else setSongTitle(query); // Set song title from URL query parameter
+    if (new URLSearchParams(location.search).get("query") === "")
+      setQuery("hehe")
   }, [location.search]);
 
   const accessToken = useAccessToken();
-  const results = SearchTrack(accessToken, query);
-  console.log(results);
+  const results = SearchTrack(accessToken, query).items;
 
   return (
-    <VStack ml={40} spacing={4} align="stretch" maxW="80%">
-      <br />
-      {songTitle && (
+    <VStack ml={40} spacing={4} mt="4em" align="stretch" maxW="80%">
         <Text as="h2" size="md" mt={20} ml={40} color="white">
-          Showing Search Results for "{songTitle}"
+          Showing Search Results for "{query}"
         </Text>
-      )}
-      {results.items ? (
-        results.items.map((song) => (
-          <Box
-            key={song.id}
-            p={4}
-            borderWidth="1px"
-            borderRadius="md"
-            bg="gray.100"
-          >
-            <Flex align="center">
-              <Image
-                src={song.album.images[0].url}
-                alt={song.album}
-                boxSize="100px"
-                objectFit="cover"
-                mr={4}
-              />
+      {results ? (
+        results.map((song) => (
+        <Box
+          key={song.id}
+          p={4}
+          borderWidth="1px"
+          borderRadius="md"
+          bg="gray.100"
+        >
+          <Flex align="center">
+            <Image
+              src={song.album.images[0].url}
+              alt={song.album}
+              boxSize="100px"
+              objectFit="cover"
+              mr={4}
+            />
 
               <VStack spacing={2} align="flex-start">
                 <Text fontSize="md" color="black">

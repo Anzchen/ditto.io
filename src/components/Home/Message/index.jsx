@@ -23,7 +23,7 @@ function Message(props) {
         </Box>
       ) : (
         <Box ml="2em" as="b" color="white" w="14em">
-          <Text color="white">Here are the Top 3 Songs on Spotify today!</Text>
+          <Text color="white">Log in to see your top 3 Songs on Spotify!</Text>
         </Box>
       )}
     </>
