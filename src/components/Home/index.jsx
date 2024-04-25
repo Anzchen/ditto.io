@@ -22,6 +22,7 @@ function Home() {
       try {
         const res = await axios.post("http://localhost:4000/api/users/profile");
         const isUser = res.data;
+        console.log(isUser);
         if (isUser) {
           setUser(isUser);
           setTopSongs(isUser.songs);
@@ -48,9 +49,14 @@ function Home() {
         <Discover />
         {user && <Message user={user} isLoggedIn={isLoggedIn} />}
       </HStack>
-      <HStack spacing="20" flexWrap="wrap" alignContent="center" align="stretch">
+      <HStack
+        spacing="20"
+        flexWrap="wrap"
+        alignContent="center"
+        align="stretch"
+      >
         {isLoggedIn ? (
-          tracks.length > 0 ? (
+          tracks && tracks.length > 0 ? (
             tracks.map((song) => <Song key={song.song_id} song={song} />)
           ) : (
             <Text color="white">No songs available.</Text>
