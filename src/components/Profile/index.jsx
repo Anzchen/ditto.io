@@ -171,6 +171,7 @@ function Profile() {
 
   return (
     <Box p="8" bg="transparent" color="white">
+      <br></br>
       <Heading as="h2" size="lg" mb="6">
         @{username}'s Profile
         {!isCurrentUser && (
