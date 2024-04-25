@@ -6,14 +6,36 @@ import * as client from "../../client.ts";
 
 function Register() {
   const [error, setError] = useState("");
-  const [user, setUser] = useState({ username: "", password: "" });
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+    role: "USER",
+    songs: [],
+    following: [],
+    followers: [],
+  });
+  const [pin, setPin] = useState("");
   const navigate = useNavigate();
   const signup = async () => {
     try {
+      if (pin === "1234") {
+        console.log("pin: " + pin);
+        setUser({
+          ...user,
+          role: "ADMIN",
+        });
+        user.role = "ADMIN";
+        console.log(user.role);
+      } else {
+        setUser({
+          ...user,
+          role: "USER",
+        });
+      }
       await client.signup(user);
-      navigate("/profile/${username}");
+      navigate(`/profile/${user.username}`);
     } catch (err) {
-      setError(err.response.data.message);
+      setError(err);
     }
   };
 
@@ -57,6 +79,15 @@ function Register() {
               password: e.target.value,
             })
           }
+        />
+        <Input
+          type="password"
+          placeholder="admin pin"
+          variant="filled"
+          size="md"
+          mb="6"
+          value={pin}
+          onChange={(e) => setPin(e.target.value)}
         />
         <Button colorScheme="purple" size="md" onClick={signup} mb="4">
           Register
