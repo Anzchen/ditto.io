@@ -91,7 +91,7 @@ function EditProfile() {
   };
 
   return (
-    <Box p="8" bg="transparent" color="white">
+    <Box p="20" bg="transparent" color="white">
       <Heading as="h2" size="lg" mb="6">
         @{profile.username}'s Profile
       </Heading>

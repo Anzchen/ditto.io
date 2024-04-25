@@ -71,17 +71,18 @@ export default function Details() {
       color="white"
       mb="5em"
       ml="30em"
+      flexWrap="wrap"
     >
       + Add a Review
     </Button>
   );
 
   return (
-    <VStack p="4">
+    <VStack p="4" align="stretch">
       {tracks.length > 0 ? (
         tracks.map((track) => {
           console.log(track)
-          return     <HStack>
+          return     <HStack key={track.id} spacing="4" flexWrap="wrap" justify="center">
             <Flex
               direction="column"
               align="center"
@@ -125,7 +126,7 @@ export default function Details() {
         <Text color="white">No songs available.</Text>
       )}
 
-      <VStack>
+      <VStack flexWrap="wrap">
         {displayCreateReview && <CreateReview user={"user1"} track={songId} />}
         <Text mt="2em" mr="61em" color="white">
           Reviews
