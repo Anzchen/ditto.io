@@ -33,8 +33,12 @@ function Profile() {
     try {
       const userProfile = await client.getUserByUsername(username);
       setProfile(userProfile);
-      const isUserFollowing = ourProfile.following.includes(username);
-      setIsFollowing(isUserFollowing);
+      fetchourProfile();
+      console.log("our profile: " + JSON.stringify(ourProfile));
+      if (ourProfile.following && ourProfile.following.length > 0) {
+        const isUserFollowing = ourProfile.following.includes(username);
+        setIsFollowing(isUserFollowing);
+      }
     } catch (error) {
       console.error("Error fetching profile:", error);
       toast({
