@@ -44,27 +44,24 @@ function Home() {
   console.log(tracks);
 
   return (
-    <VStack>
-      <HStack mt="7em" mr="45em">
+    <VStack spacing="20" align="stretch" p="20">
+      <HStack>
         <Discover />
         {user && <Message user={user} isLoggedIn={isLoggedIn} />}
       </HStack>
-      {isLoggedIn ? (
-        <HStack>
-          {tracks.length > 0 ? (
-            tracks.map((song) => {
-              return <Song key={song.song_id} song={song} />;
-            })
+      <HStack spacing="20" flexWrap="wrap" alignContent="center" align="stretch">
+        {isLoggedIn ? (
+          tracks.length > 0 ? (
+            tracks.map((song) => <Song key={song.song_id} song={song} />)
           ) : (
             <Text color="white">No songs available.</Text>
-          )}
-        </HStack>
-      ) : (
-        <HStack>
-          <Text color="white">Log in to see user data </Text>
-        </HStack>
-      )}
+          )
+        ) : (
+          <Text color="white">Log in to see user data</Text>
+        )}
+      </HStack>
     </VStack>
   );
 }
+
 export default Home;
